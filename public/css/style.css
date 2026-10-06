@@ -760,19 +760,36 @@ body.page-result::after {
 .question-card { width: 100%; display: flex; flex-direction: column; padding: 16px; }
 .question-card__head { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
 .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   padding: 5px 11px;
   border-radius: 999px;
-  background: rgba(0, 229, 255, 0.14);
+  background: rgba(0, 229, 255, 0.12);
   color: var(--neon-cyan);
   border: 1px solid rgba(0, 229, 255, 0.3);
+}
+/* titik indikator pada pill nomor soal */
+.pill:not(.pill--dim)::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan);
+  animation: pillPulse 1.8s ease-in-out infinite;
 }
 .pill--dim {
   background: rgba(255,255,255,0.06);
   color: var(--teks-dim);
   border-color: var(--glass-border);
+}
+@keyframes pillPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.72); }
 }
 .question-card__text {
   font-size: clamp(0.96rem, 4.1vw, 1.08rem);
@@ -1174,10 +1191,29 @@ body.page-result::after {
 .rank--2 { color: #d7dce8; }
 .rank--3 { color: #e2a06a; }
 
-.status-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
-.status--mengerjakan { background: rgba(255, 209, 102, 0.16); color: var(--emas); }
-.status--selesai { background: rgba(34, 227, 154, 0.16); color: var(--benar); }
-.status--terkunci { background: rgba(255, 77, 109, 0.16); color: var(--salah); }
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+.status--mengerjakan { background: rgba(255, 209, 102, 0.14); color: var(--emas); border-color: rgba(255, 209, 102, 0.35); }
+.status--mengerjakan::before { animation: pillPulse 1.8s ease-in-out infinite; }
+.status--selesai { background: rgba(34, 227, 154, 0.14); color: var(--benar); border-color: rgba(34, 227, 154, 0.35); }
+.status--terkunci { background: rgba(255, 77, 109, 0.14); color: var(--salah); border-color: rgba(255, 77, 109, 0.38); }
+.status--terkunci::before { animation: pillPulse 1s ease-in-out infinite; }
 
 .row-actions { display: flex; gap: 6px; }
 .icon-btn {
@@ -1205,21 +1241,54 @@ body.page-result::after {
   left: 50%;
   bottom: calc(22px + var(--safe-bottom));
   transform: translate(-50%, 30px);
-  background: var(--bg-panel-2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(26, 27, 58, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
   color: var(--teks);
-  padding: 12px 20px;
-  border-radius: 12px;
+  padding: 12px 18px 12px 16px;
+  border-radius: 14px;
   font-size: 0.88rem;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s, transform 0.3s;
+  transition: opacity 0.3s, transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
   z-index: 90;
-  box-shadow: var(--shadow);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  max-width: min(92vw, 420px);
+}
+.toast::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px currentColor;
+}
+/* progress bar di dasar toast */
+.toast::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2.5px;
+  width: 100%;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast--ok { border-color: rgba(34, 227, 154, 0.5); }
-.toast--err { border-color: rgba(255, 77, 109, 0.5); }
+.toast.show::after { animation: toastBar 2.6s linear forwards; }
+.toast--ok { border-color: rgba(34, 227, 154, 0.45); }
+.toast--ok::before { background: var(--benar); color: var(--benar); }
+.toast--ok::after { background: linear-gradient(90deg, var(--benar), #67f0b0); }
+.toast--err { border-color: rgba(255, 77, 109, 0.45); }
+.toast--err::before { background: var(--salah); color: var(--salah); }
+.toast--err::after { background: linear-gradient(90deg, var(--salah), #ff9f1c); }
+@keyframes toastBar { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 
 /* =========================================================================
    KONFETI / HUJAN BINTANG
