@@ -91,7 +91,7 @@
   function setProgress(answered, total) {
     const pct = Math.round((answered / total) * 100);
     els.progressFill.style.width = pct + '%';
-    els.progressLabel.textContent = 'Soal ' + answered + ' / ' + total;
+    els.progressLabel.textContent = answered + ' / ' + total;
   }
 
   function renderState(state) {

@@ -328,35 +328,40 @@ body.page-result::after {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: calc(10px + var(--safe-top)) 14px 10px;
+  padding: calc(10px + var(--safe-top)) 14px 8px;
   background: linear-gradient(180deg, rgba(11,12,30,0.92), rgba(11,12,30,0));
   backdrop-filter: blur(6px);
 }
-.hud__left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.hud__left { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .hud__badge {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 42vw;
 }
-.hud__badge--dim { color: var(--teks-dim); font-weight: 500; font-size: 0.72rem; }
+.hud__badge--dim { color: var(--teks-dim); font-weight: 500; font-size: 0.7rem; }
 .hud__mission {
   font-family: var(--font-display);
-  font-size: 0.66rem;
-  letter-spacing: 0.18em;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
   color: var(--neon-cyan);
   opacity: 0.85;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  background: rgba(0, 229, 255, 0.06);
+  white-space: nowrap;
 }
 .hud__km {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   color: var(--emas);
   background: rgba(255, 209, 102, 0.12);
   border: 1px solid rgba(255, 209, 102, 0.35);
-  padding: 6px 10px;
+  padding: 6px 11px;
   border-radius: 999px;
   white-space: nowrap;
 }
@@ -364,9 +369,7 @@ body.page-result::after {
 /* ---------- Panggung astronot vertikal ---------- */
 .stage {
   position: relative;
-  height: 40vh;
-  min-height: 290px;
-  max-height: 400px;
+  height: clamp(190px, 34vh, 400px);
   margin: 2px 0;
   overflow: hidden;
   flex: 0 0 auto;
@@ -653,8 +656,14 @@ body.page-result::after {
 
 /* ---------- Progress ---------- */
 .progress { padding: 0 16px; }
+.progress__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .progress__track {
-  height: 10px;
+  flex: 1;
+  height: 8px;
   border-radius: 999px;
   background: rgba(255,255,255,0.1);
   overflow: hidden;
@@ -669,17 +678,18 @@ body.page-result::after {
   transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .progress__label {
-  text-align: center;
-  font-size: 0.78rem;
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 700;
   color: var(--teks-dim);
-  margin-top: 6px;
   letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 /* ---------- Kartu soal ---------- */
-.quiz { padding: 10px 16px 16px; flex: 1; display: flex; }
-.question-card { width: 100%; display: flex; flex-direction: column; }
-.question-card__head { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.quiz { padding: 8px 16px 14px; flex: 1; display: flex; }
+.question-card { width: 100%; display: flex; flex-direction: column; padding: 16px; }
+.question-card__head { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
 .pill {
   font-size: 0.72rem;
   font-weight: 700;
@@ -696,61 +706,93 @@ body.page-result::after {
   border-color: var(--glass-border);
 }
 .question-card__text {
-  font-size: clamp(0.96rem, 4.2vw, 1.1rem);
+  font-size: clamp(0.96rem, 4.1vw, 1.08rem);
   line-height: 1.5;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
 }
 
-.options { display: grid; grid-template-columns: 1fr; gap: 9px; }
+/* Opsi jawaban: grid 2x2 (ala kuis game) */
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 .option {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   text-align: left;
-  padding: 12px 14px;
-  min-height: 52px;
-  font-size: 1rem;
+  padding: 12px 13px;
+  min-height: 62px;
+  font-size: 1.02rem;
   font-family: var(--font-body);
   color: var(--teks);
-  background: rgba(9, 10, 25, 0.6);
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
   border: 1.5px solid var(--glass-border);
-  border-radius: 14px;
+  border-radius: 16px;
   cursor: pointer;
   transition: transform 0.15s, border 0.2s, background 0.2s, box-shadow 0.2s;
 }
-.option:hover { border-color: var(--neon-cyan); background: rgba(0, 229, 255, 0.08); transform: translateY(-1px); }
+.option::before {
+  content: '';
+  position: absolute;
+  left: 14px; right: 14px; top: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.55), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.option:hover { border-color: var(--neon-cyan); background: rgba(0, 229, 255, 0.1); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,229,255,0.18); }
+.option:hover::before { opacity: 1; }
+.option:active { transform: translateY(0) scale(0.98); }
 .option__key {
-  flex: 0 0 30px;
-  height: 30px;
+  flex: 0 0 34px;
+  height: 34px;
   display: grid;
   place-items: center;
-  border-radius: 9px;
+  border-radius: 11px;
   font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 700;
-  background: rgba(255,255,255,0.1);
+  font-size: 0.92rem;
+  font-weight: 800;
+  background: rgba(0, 229, 255, 0.16);
   color: var(--neon-cyan);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  transition: background 0.2s, color 0.2s;
+}
+.option__txt {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: 0.01em;
 }
 .option--correct {
   border-color: var(--benar) !important;
-  background: rgba(34, 227, 154, 0.16) !important;
+  background: rgba(34, 227, 154, 0.18) !important;
+  box-shadow: 0 0 22px rgba(34, 227, 154, 0.35) !important;
   animation: pulseGreen 0.6s ease;
 }
+.option--correct .option__key { background: var(--benar); color: #05221a; border-color: var(--benar); }
+.option--correct .option__txt { color: var(--benar); }
 .option--wrong {
   border-color: var(--salah) !important;
-  background: rgba(255, 77, 109, 0.16) !important;
+  background: rgba(255, 77, 109, 0.18) !important;
   animation: shake 0.4s ease;
 }
+.option--wrong .option__key { background: var(--salah); color: #2a0510; border-color: var(--salah); }
+.option--wrong .option__txt { color: var(--salah); }
 .option--dim { opacity: 0.4; }
 .option:disabled { cursor: default; }
 
 .feedback {
-  margin: 14px 0 0;
+  margin: 12px 0 0;
   text-align: center;
   font-family: var(--font-display);
   font-size: 1.1rem;
-  min-height: 1.4em;
+  min-height: 1.3em;
   letter-spacing: 0.05em;
 }
 .feedback--ok { color: var(--benar); }
@@ -758,8 +800,8 @@ body.page-result::after {
 
 /* ---------- Kunci jawaban (muncul setelah menjawab) ---------- */
 .answerbar {
-  margin-top: 14px;
-  padding: 12px 14px;
+  margin-top: 12px;
+  padding: 10px 12px;
   border-radius: 14px;
   background: rgba(0, 229, 255, 0.06);
   border: 1px solid rgba(0, 229, 255, 0.22);
@@ -776,14 +818,14 @@ body.page-result::after {
 .answerchip {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 9px 11px;
+  gap: 2px;
+  padding: 8px 10px;
   border-radius: 11px;
   background: rgba(9, 10, 25, 0.55);
   border: 1.5px solid var(--glass-border);
 }
 .answerchip__label {
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--teks-dim);
@@ -791,18 +833,19 @@ body.page-result::after {
 .answerchip__val {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.02rem;
+  font-size: 0.98rem;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
 }
 .answerchip__key {
-  flex: 0 0 24px;
-  height: 24px;
+  flex: 0 0 22px;
+  height: 22px;
   display: grid;
   place-items: center;
-  border-radius: 7px;
-  font-size: 0.78rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
   background: rgba(255,255,255,0.1);
   color: var(--teks);
 }
@@ -812,8 +855,8 @@ body.page-result::after {
 .answerchip--no { border-color: var(--salah); }
 .answerchip--no .answerchip__val { color: var(--salah); }
 .answerbar__hint {
-  margin-top: 9px;
-  font-size: 0.82rem;
+  margin-top: 7px;
+  font-size: 0.78rem;
   color: var(--teks-dim);
   text-align: center;
 }
@@ -1211,8 +1254,21 @@ body.page-result::after {
    RESPONSIF (layar lebih besar)
    ========================================================================= */
 @media (min-width: 560px) {
-  .options { grid-template-columns: 1fr 1fr; }
   .admin__stats { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* HP pendek (mis. 360x640) — rapatkan agar muat 1 layar */
+@media (max-height: 700px) {
+  .stage { height: clamp(150px, 26vh, 220px); }
+  .hud { padding-top: calc(6px + var(--safe-top)); padding-bottom: 6px; }
+  .question-card { padding: 12px; }
+  .question-card__text { font-size: 0.94rem; margin-bottom: 10px; }
+  .question-card__head { margin-bottom: 8px; }
+  .option { min-height: 58px; padding: 10px 12px; }
+  .option__txt { font-size: 1.02rem; }
+  .options { gap: 8px; }
+  .progress__label { margin-top: 3px; font-size: 0.72rem; }
+  .quiz { padding: 6px 12px 10px; }
 }
 
 @media (min-width: 900px) {
