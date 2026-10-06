@@ -36,6 +36,11 @@
     lockedHint: document.getElementById('lockedHint'),
     confetti: document.getElementById('confetti'),
     pointsLayer: document.getElementById('pointsLayer'),
+    confirmOverlay: document.getElementById('confirmOverlay'),
+    confirmKey: document.getElementById('confirmKey'),
+    confirmVal: document.getElementById('confirmVal'),
+    confirmOk: document.getElementById('confirmOk'),
+    confirmCancel: document.getElementById('confirmCancel'),
   };
 
   let current = null;
@@ -46,6 +51,8 @@
   let lastKm = 0;
   let lastScore = 0;
   let armed = false; // anti-cheat baru aktif setelah konfirmasi
+  let pendingOption = null;
+  let pendingBtn = null;
 
   const KEY_LABELS = ['A', 'B', 'C', 'D'];
 
@@ -201,10 +208,53 @@
   /* --------------------------- jawab soal --------------------------- */
   async function onChoose(btn, option) {
     if (answering || locked || finished || !current || !current.question) return;
+
+    // Tandai pilihan sementara lalu minta konfirmasi
+    const buttons = Array.from(els.options.querySelectorAll('.option'));
+    buttons.forEach((b) => b.classList.remove('option--selected'));
+    if (btn) btn.classList.add('option--selected');
+
+    openConfirm(option, btn);
+  }
+
+  /** Tampilkan popup konfirmasi sebelum mengirim jawaban. */
+  function openConfirm(option, btn) {
+    pendingOption = option;
+    pendingBtn = btn || null;
+
+    const opts = (current && current.question && current.question.options) || [];
+    const idx = opts.findIndex((o) => String(o) === String(option));
+    els.confirmKey.textContent = idx >= 0 ? KEY_LABELS[idx] : '?';
+    els.confirmVal.textContent = option;
+
+    els.confirmOverlay.classList.add('active');
+    els.confirmOk.focus();
+  }
+
+  function closeConfirm() {
+    els.confirmOverlay.classList.remove('active');
+    pendingOption = null;
+    pendingBtn = null;
+    const buttons = Array.from(els.options.querySelectorAll('.option'));
+    buttons.forEach((b) => b.classList.remove('option--selected'));
+  }
+
+  /** Kirim jawaban yang sudah dikonfirmasi. */
+  async function submitConfirmed() {
+    const option = pendingOption;
+    if (option == null) return;
+    if (answering || locked || finished || !current || !current.question) return;
+
     answering = true;
+    els.confirmOverlay.classList.remove('active');
 
     const buttons = Array.from(els.options.querySelectorAll('.option'));
-    buttons.forEach((b) => (b.disabled = true));
+    buttons.forEach((b) => {
+      b.disabled = true;
+      b.classList.remove('option--selected');
+    });
+    pendingOption = null;
+    pendingBtn = null;
 
     const res = await API.post('/api/answer', {
       id, questionId: current.question.id, option,
@@ -444,6 +494,19 @@
   }
 
   els.checkAccessBtn.addEventListener('click', checkAccess);
+
+  // Popup konfirmasi jawaban
+  els.confirmOk.addEventListener('click', submitConfirmed);
+  els.confirmCancel.addEventListener('click', closeConfirm);
+  els.confirmOverlay.addEventListener('click', (e) => {
+    if (e.target === els.confirmOverlay) closeConfirm();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (els.confirmOverlay.classList.contains('active')) {
+      if (e.key === 'Escape') closeConfirm();
+      if (e.key === 'Enter') { e.preventDefault(); submitConfirmed(); }
+    }
+  });
 
   /* --------------------------- init --------------------------- */
   async function refreshState() {

@@ -92,6 +92,21 @@
     </section>
   </main>
 
+  <!-- Popup konfirmasi jawaban -->
+  <div class="overlay overlay--confirm" id="confirmOverlay" aria-hidden="true">
+    <div class="confirm" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h2 class="confirm__title" id="confirmTitle">Konfirmasi</h2>
+      <div class="confirm__choice">
+        <span class="confirm__key" id="confirmKey">A</span>
+        <span class="confirm__val" id="confirmVal">—</span>
+      </div>
+      <div class="confirm__actions">
+        <button class="btn confirm__btn confirm__btn--ubah" type="button" id="confirmCancel">Ubah</button>
+        <button class="btn confirm__btn confirm__btn--ok" type="button" id="confirmOk">Konfirmasi</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Popup pelanggaran -->
   <div class="overlay overlay--alarm" id="violationOverlay" aria-hidden="true">
     <div class="alarm">
