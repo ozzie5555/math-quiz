@@ -993,10 +993,54 @@ body.page-result::after {
 .locked__title { font-family: var(--font-display); color: var(--salah); font-size: 1.5rem; margin: 8px 0; }
 .locked__text { color: var(--teks-dim); font-size: 0.92rem; line-height: 1.5; }
 .locked__hint { color: var(--neon-cyan); font-size: 0.85rem; margin: 12px 0; }
-.loader { display: flex; gap: 6px; justify-content: center; margin: 12px 0 18px; }
-.loader span { width: 9px; height: 9px; border-radius: 50%; background: var(--neon-cyan); animation: bounceDot 1s infinite; }
-.loader span:nth-child(2) { animation-delay: 0.15s; }
-.loader span:nth-child(3) { animation-delay: 0.3s; }
+/* Loader: cincin orbit + planet (tema antariksa) */
+.loader {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  margin: 14px auto 18px;
+  display: grid;
+  place-items: center;
+}
+.loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 229, 255, 0.22);
+  border-top-color: var(--neon-cyan);
+  border-right-color: rgba(168, 85, 247, 0.7);
+  animation: orbitSpin 1.1s linear infinite;
+}
+/* planet di tengah */
+.loader span:nth-child(1) {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #8ff7ff, #00b8d4 60%, #0b3a55);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+}
+/* bulan kecil mengorbit */
+.loader span:nth-child(2) {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: #eaeaf5;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  transform-origin: 3px 26px;
+  animation: orbitMoon 1.1s linear infinite;
+}
+.loader span:nth-child(3) { display: none; }
+@keyframes orbitSpin { to { transform: rotate(360deg); } }
+@keyframes orbitMoon {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(0) rotate(360deg); }
+}
 
 .overlay--done { background: rgba(6, 6, 16, 0.9); }
 .done { text-align: center; max-width: 380px; padding: 30px 22px; }
@@ -1335,7 +1379,6 @@ body.page-result::after {
 @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-7px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
 @keyframes pulseGreen { 0% { box-shadow: 0 0 0 0 rgba(34,227,154,0.6); } 100% { box-shadow: 0 0 0 16px rgba(34,227,154,0); } }
 @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
-@keyframes bounceDot { 0%,100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-8px); opacity: 1; } }
 @keyframes dizzySpin { from { transform: translateX(-50%) rotate(0); } to { transform: translateX(-50%) rotate(360deg); } }
 @keyframes dizzyWobble { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-7deg); } 75% { transform: rotate(7deg); } }
 @keyframes jetFlame { from { transform: translateX(-50%) scaleY(0.78) scaleX(0.92); } to { transform: translateX(-50%) scaleY(1.18) scaleX(1.05); } }
