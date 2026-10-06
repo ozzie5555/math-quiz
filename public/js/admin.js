@@ -65,6 +65,7 @@
 
   function enterDashboard(payload) {
     els.login.classList.add('hidden');
+    document.body.classList.remove('is-login');
     els.admin.hidden = false;
     applyData(payload);
     startAutoRefresh();
@@ -258,5 +259,6 @@
       API.clear('mq_admin_pw');
     }
     els.login.classList.remove('hidden');
+    document.body.classList.add('is-login');
   })();
 })();
