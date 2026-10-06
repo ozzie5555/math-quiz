@@ -261,7 +261,6 @@
     void els.astro.offsetWidth;
     els.astro.classList.add('astro--boost', 'astro--pulse');
     window.Space.burstDrift(-80 * level);
-    if (window.Flame) window.Flame.setBoost(true);
 
     // Naik halus ke ketinggian baru (transisi CSS pada `bottom`).
     const target = astroBottomFor(level);
@@ -278,7 +277,6 @@
 
     setTimeout(() => {
       els.astro.classList.remove('astro--boost');
-      if (window.Flame) window.Flame.setBoost(false);
     }, 1000);
     setTimeout(() => els.astro.classList.remove('astro--pulse'), 680);
   }

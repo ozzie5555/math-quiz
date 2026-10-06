@@ -473,18 +473,47 @@ body.page-result::after {
   -webkit-user-drag: none;
 }
 
-/* Semburan jetpack — canvas api (partikel, kesan bervolume) */
-.astro__flamecanvas {
+/* Semburan jetpack — keluar dari BAWAH astronot (kaki) */
+.astro__flame {
+  position: absolute;
+  left: 51%;
+  top: 83%;
+  width: 20px;
+  height: 34px;
+  transform: translateX(-50%);
+  border-radius: 45% 45% 50% 50% / 30% 30% 70% 70%;
+  background: linear-gradient(180deg, #ffffff 0%, #fff2a8 18%, #ffb43c 48%, #ff5b2e 74%, rgba(255, 77, 109, 0) 100%);
+  filter: blur(1px) drop-shadow(0 0 12px rgba(255, 159, 28, 0.9));
+  transform-origin: 50% 0%;
+  animation: jetFlame 0.16s ease-in-out infinite alternate;
+  opacity: 0.95;
+  z-index: 2;
+}
+.astro__flame::before {
+  content: '';
   position: absolute;
   left: 50%;
-  bottom: -2%;
-  width: 66%;
-  height: 78%;
+  top: 0;
+  width: 34px;
+  height: 20px;
   transform: translateX(-50%);
-  pointer-events: none;
-  z-index: 2;
-  mix-blend-mode: screen;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,246,194,0.95) 0%, rgba(255,159,28,0.5) 45%, rgba(255,77,109,0) 75%);
+  filter: blur(2px);
 }
+.astro__flame::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  width: 10px;
+  height: 30px;
+  transform: translateX(-50%);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255,226,150,0.85), rgba(255,77,109,0));
+  filter: blur(2px);
+}
+.astro--boost .astro__flame { animation-duration: 0.06s; height: 76px; width: 30px; }
 
 /* Badge COMBO ×N */
 .astro__combo {
@@ -1129,7 +1158,6 @@ body.page-result::after {
 @keyframes dizzySpin { from { transform: translateX(-50%) rotate(0); } to { transform: translateX(-50%) rotate(360deg); } }
 @keyframes dizzyWobble { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-7deg); } 75% { transform: rotate(7deg); } }
 @keyframes jetFlame { from { transform: translateX(-50%) scaleY(0.78) scaleX(0.92); } to { transform: translateX(-50%) scaleY(1.18) scaleX(1.05); } }
-/* (jetFlame tetap ada untuk cadangan bila canvas tidak tersedia) */
 @keyframes streak { 0% { height: 0; opacity: 0; } 25% { height: 80px; opacity: 1; } 100% { height: 130px; opacity: 0; } }
 @keyframes thrustRing { 0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(2.4); opacity: 0; } }
 @keyframes hudPulse { 0% { transform: translateX(-50%) translateY(-4px) scale(1); } 45% { transform: translateX(-50%) translateY(-4px) scale(1.16); } 100% { transform: translateX(-50%) translateY(-4px) scale(1); } }
