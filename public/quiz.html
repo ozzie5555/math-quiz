@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B0C1E" />
+  <title>Misi Permutasi — Spaceman Math Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="page-quiz" data-sky="0">
+  <div class="quiz-bg" aria-hidden="true"></div>
+  <div class="danger-flash" id="dangerFlash" aria-hidden="true"></div>
+  <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+
+  <!-- HUD -->
+  <header class="hud">
+    <div class="hud__left">
+      <span class="hud__badge" id="hudName">—</span>
+      <span class="hud__badge hud__badge--dim" id="hudAbsen">Absen —</span>
+    </div>
+    <div class="hud__mission">MISI PERMUTASI</div>
+    <div class="hud__right">
+      <span class="hud__km" id="hudKm">0 km</span>
+    </div>
+  </header>
+
+  <!-- Panggung astronot -->
+  <div class="stage" id="stage">
+    <div class="stage__ruler" id="ruler" aria-hidden="true"></div>
+
+    <div class="astro astro--fly" id="astro">
+      <div class="astro__hud" id="astroHud">
+        <span class="astro__score" id="astroScore">0</span>
+        <span class="astro__unit">km</span>
+      </div>
+
+      <div class="astro__body">
+        <span class="astro__dizzy" aria-hidden="true"></span>
+        <picture>
+          <source srcset="/assets/astro-fly.webp" type="image/webp" />
+          <img class="astro__img" src="/assets/astro-fly.png" alt="Astronot" width="245" height="432" decoding="async" />
+        </picture>
+        <span class="astro__flame" id="astroFlame" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="stage__moon" id="moon" aria-hidden="true">
+      <picture>
+        <source srcset="/assets/moon.webp" type="image/webp" />
+        <img class="stage__moon-img" src="/assets/moon.png" alt="" width="341" height="300" decoding="async" />
+      </picture>
+      <div class="stage__impact" id="impact" aria-hidden="true">
+        <span class="stage__impact-ring"></span>
+        <span class="stage__impact-ring stage__impact-ring--2"></span>
+        <span class="stage__impact-burst"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress" id="progress">
+    <div class="progress__track">
+      <div class="progress__fill" id="progressFill"></div>
+    </div>
+    <div class="progress__label" id="progressLabel">Soal 0 / 10</div>
+  </div>
+
+  <!-- Kartu soal -->
+  <main class="quiz">
+    <section class="card glass question-card" id="questionCard">
+      <div class="question-card__head">
+        <span class="pill" id="qNumber">Soal 0</span>
+        <span class="pill pill--dim" id="qLevel">Landasan Bulan</span>
+      </div>
+      <p class="question-card__text" id="qText">Memuat soal…</p>
+      <div class="options stagger" id="options"></div>
+
+      <!-- Kunci jawaban (muncul setelah menjawab) -->
+      <div class="answerbar" id="answerbar" hidden>
+        <div class="answerbar__row" id="answerbarRow"></div>
+        <div class="answerbar__hint" id="answerbarHint"></div>
+      </div>
+
+      <p class="feedback" id="feedback" role="status"></p>
+    </section>
+  </main>
+
+  <!-- Popup pelanggaran -->
+  <div class="overlay overlay--alarm" id="violationOverlay" aria-hidden="true">
+    <div class="alarm">
+      <div class="alarm__mark" aria-hidden="true"></div>
+      <h2 class="alarm__title">HAYOO KETAWAN!</h2>
+      <p class="alarm__text">Kamu keluar dari misi. Misi dikunci.</p>
+    </div>
+  </div>
+
+  <!-- Layar terkunci -->
+  <div class="overlay overlay--locked" id="lockedOverlay" aria-hidden="true">
+    <div class="locked card glass">
+      <div class="locked__lock" aria-hidden="true"></div>
+      <h2 class="locked__title">MISI TERKUNCI</h2>
+      <p class="locked__text">Progresmu tersimpan. Hubungi admin untuk memberi izin melanjutkan.</p>
+      <p class="locked__hint" id="lockedHint">Menunggu izin admin…</p>
+      <div class="loader" aria-hidden="true"><span></span><span></span><span></span></div>
+      <button class="btn btn--ghost" id="checkAccessBtn" type="button">Cek Akses</button>
+    </div>
+  </div>
+
+  <!-- Overlay selesai -->
+  <div class="overlay overlay--done" id="doneOverlay" aria-hidden="true">
+    <div class="done card glass">
+      <div class="done__mark" aria-hidden="true"></div>
+      <h2 class="done__title">MISI SELESAI</h2>
+      <p class="done__text">Astronot berhasil naik ke <strong id="doneKm">0 km</strong>.</p>
+      <a class="btn btn--primary" href="/result" id="toResultBtn">Lihat Hasil &amp; Pembahasan</a>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/space.js"></script>
+  <script src="/js/hud.js"></script>
+  <script src="/js/quiz.js"></script>
+</body>
+</html>

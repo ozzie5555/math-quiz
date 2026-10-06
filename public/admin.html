@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0B0C1E" />
+  <title>Panel Admin — Spaceman Math Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="page-admin">
+  <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+
+  <!-- Login -->
+  <div class="login" id="login">
+    <section class="card glass login__card">
+      <h1 class="card__title">Panel Admin</h1>
+      <p class="login__sub">Masukkan password untuk mengakses data misi.</p>
+      <form id="loginForm">
+        <label class="field">
+          <span class="field__label">Password</span>
+          <input class="field__input" type="password" id="password" placeholder="••••••••" required />
+        </label>
+        <button class="btn btn--primary" type="submit">Masuk</button>
+        <p class="form-error" id="loginError" role="alert"></p>
+      </form>
+    </section>
+  </div>
+
+  <!-- Dashboard -->
+  <main class="admin" id="admin" hidden>
+    <header class="admin__head">
+      <div>
+        <h1 class="admin__title">Panel Admin</h1>
+        <p class="admin__sub" id="adminSub">Spaceman Math Quest</p>
+      </div>
+      <div class="admin__actions">
+        <label class="switch">
+          <input type="checkbox" id="autoRefresh" checked />
+          <span>Auto-refresh</span>
+        </label>
+        <button class="btn btn--ghost btn--sm" id="refreshBtn" type="button">Muat</button>
+        <button class="btn btn--ghost btn--sm" id="exportBtn" type="button">CSV</button>
+        <button class="btn btn--ghost btn--sm" id="logoutBtn" type="button">Keluar</button>
+      </div>
+    </header>
+
+    <section class="admin__stats" id="adminStats"></section>
+
+    <section class="card glass">
+      <h2 class="card__title">Scoreboard</h2>
+      <div class="table-wrap">
+        <table class="table table--score" id="scoreTable">
+          <thead>
+            <tr>
+              <th>#</th><th>Nama</th><th>Absen</th><th>Nilai</th><th>Benar</th><th>Ketinggian</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card glass">
+      <h2 class="card__title">Semua Peserta</h2>
+      <div class="filter-row">
+        <input class="field__input field__input--sm" type="search" id="searchInput" placeholder="Cari nama / absen…" />
+        <select class="field__input field__input--sm" id="statusFilter">
+          <option value="">Semua status</option>
+          <option value="mengerjakan">Mengerjakan</option>
+          <option value="terkunci">Terkunci</option>
+          <option value="selesai">Selesai</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="dataTable">
+          <thead>
+            <tr>
+              <th>Nama</th><th>Absen</th><th>Nilai</th><th>Benar</th><th>Pelanggaran</th><th>Status</th><th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="admin__foot" id="lastUpdated"></p>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-hidden="true"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/space.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>
