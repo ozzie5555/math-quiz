@@ -21,6 +21,27 @@
     requestAnimationFrame(tick);
   }
 
+  /** Format angka ringkas: 800 -> "800", 45000 -> "45 rb", 1023000 -> "1,02 jt". */
+  function formatCompact(n) {
+    const v = Number(n) || 0;
+    const abs = Math.abs(v);
+    if (abs < 1000) return String(v);
+    if (abs < 1000000) {
+      const rb = v / 1000;
+      const rounded = Math.round(rb * 10) / 10;
+      const s = (Number.isInteger(rounded) ? rounded.toString() : rounded.toFixed(1).replace('.', ','));
+      return s + ' rb';
+    }
+    const jt = v / 1000000;
+    const s = (Math.round(jt * 100) / 100).toFixed(2).replace('.', ',');
+    return s + ' jt';
+  }
+
+  /** Format angka penuh dengan pemisah ribuan gaya Indonesia. */
+  function formatFull(n) {
+    return Number(n || 0).toLocaleString('id-ID');
+  }
+
   function starConfetti(container, count, duration) {
     if (!container || reduceMotion) return;
     const n = window.innerWidth < 480 ? Math.min(count, 22) : count;
@@ -38,5 +59,5 @@
     }
   }
 
-  window.HUD = { countUp, starConfetti };
+  window.HUD = { countUp, starConfetti, formatCompact, formatFull };
 })();

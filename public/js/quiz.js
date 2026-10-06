@@ -11,6 +11,7 @@
     stage: document.getElementById('stage'),
     astro: document.getElementById('astro'),
     astroScore: document.getElementById('astroScore'),
+    comboBadge: document.getElementById('comboBadge'),
     impact: document.getElementById('impact'),
     moon: document.getElementById('moon'),
     hudName: document.getElementById('hudName'),
@@ -30,10 +31,11 @@
     violationOverlay: document.getElementById('violationOverlay'),
     lockedOverlay: document.getElementById('lockedOverlay'),
     doneOverlay: document.getElementById('doneOverlay'),
-    doneKm: document.getElementById('doneKm'),
+    doneScore: document.getElementById('doneScore'),
     checkAccessBtn: document.getElementById('checkAccessBtn'),
     lockedHint: document.getElementById('lockedHint'),
     confetti: document.getElementById('confetti'),
+    pointsLayer: document.getElementById('pointsLayer'),
   };
 
   let current = null;
@@ -42,6 +44,7 @@
   let answering = false;
   let pollTimer = null;
   let lastKm = 0;
+  let lastScore = 0;
   let armed = false; // anti-cheat baru aktif setelah konfirmasi
 
   const KEY_LABELS = ['A', 'B', 'C', 'D'];
@@ -96,12 +99,13 @@
     els.hudName.textContent = state.nama;
     els.hudAbsen.textContent = 'Absen ' + state.absen;
 
-    const from = lastKm;
     lastKm = state.km;
-    HUD.countUp(els.hudKm, from, state.km, 700, fmtKm);
-    HUD.countUp(els.astroScore, from, state.km, 700, function (v) {
-      return Number(v).toLocaleString('id-ID');
-    });
+    HUD.countUp(els.hudKm, 0, state.km, 700, fmtKm);
+
+    const fromScore = lastScore;
+    lastScore = state.score || 0;
+    HUD.countUp(els.astroScore, fromScore, lastScore, 700, HUD.formatFull);
+    setCombo(state.streak || 0, false);
 
     applySky(state.level);
     moveAstro(state.level, true);
@@ -114,6 +118,25 @@
     }
 
     if (state.question) renderQuestion(state.question);
+  }
+
+  /** Tampilkan badge COMBO ×N (streak >= 2). */
+  function setCombo(streak, animate) {
+    const badge = els.comboBadge;
+    if (!badge) return;
+    if (!streak || streak < 2) {
+      badge.textContent = '';
+      badge.classList.remove('show');
+      return;
+    }
+    const mult = Math.pow(2, streak - 1);
+    badge.textContent = 'COMBO ×' + mult;
+    badge.classList.add('show');
+    if (animate) {
+      badge.classList.remove('pop');
+      void badge.offsetWidth;
+      badge.classList.add('pop');
+    }
   }
 
   function renderQuestion(q) {
@@ -202,12 +225,14 @@
       if (correctBtn) correctBtn.classList.add('option--correct');
       els.feedback.textContent = 'BENAR';
       els.feedback.className = 'feedback feedback--ok';
-      boostAstro(r.level, r.km);
+      boostAstro(r.level, r.km, r.points, r.streak);
+      setCombo(r.streak || 0, true);
     } else {
       if (correctBtn) correctBtn.classList.add('option--wrong');
       els.feedback.textContent = 'SALAH';
       els.feedback.className = 'feedback feedback--no';
       wrongFlash();
+      setCombo(0, false);
     }
 
     // tampilkan kunci jawaban
@@ -223,19 +248,20 @@
     els.qLevel.textContent = r.label;
 
     setTimeout(async () => {
-      if (r.finished) { showDone({ km: r.km, level: r.level }); return; }
+      if (r.finished) { showDone({ score: r.score, km: r.km }); return; }
       answering = false;
       await refreshState();
-    }, r.correct ? 1350 : 1500);
+    }, r.correct ? 1500 : 1500);
   }
 
   /* --------------------------- animasi --------------------------- */
-  function boostAstro(level, km) {
+  function boostAstro(level, km, points, streak) {
     // restart animasi dorong
     els.astro.classList.remove('astro--boost');
     void els.astro.offsetWidth;
     els.astro.classList.add('astro--boost', 'astro--pulse');
     window.Space.burstDrift(-80 * level);
+    if (window.Flame) window.Flame.setBoost(true);
 
     // Naik halus ke ketinggian baru (transisi CSS pada `bottom`).
     const target = astroBottomFor(level);
@@ -247,11 +273,29 @@
 
     launchDust();
 
-    setTimeout(() => els.astro.classList.remove('astro--boost'), 1000);
+    // popup "+poin" melayang dari astronot
+    if (points > 0) popPoints(points, streak);
+
+    setTimeout(() => {
+      els.astro.classList.remove('astro--boost');
+      if (window.Flame) window.Flame.setBoost(false);
+    }, 1000);
     setTimeout(() => els.astro.classList.remove('astro--pulse'), 680);
-    HUD.countUp(els.astroScore, Math.max(0, km - 10000), km, 700, function (v) {
-      return Number(v).toLocaleString('id-ID');
-    });
+  }
+
+  /** Popup angka poin melayang di atas astronot. */
+  function popPoints(points, streak) {
+    if (!els.pointsLayer) return;
+    const layer = els.pointsLayer;
+    const ar = els.astro.getBoundingClientRect();
+    const el = document.createElement('span');
+    el.className = 'pts-pop';
+    el.textContent = '+' + HUD.formatFull(points);
+    if (streak >= 2) el.classList.add('pts-pop--hot');
+    el.style.left = (ar.left + ar.width / 2) + 'px';
+    el.style.top = (ar.top - 6) + 'px';
+    layer.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
   }
 
   /** Percikan debu di permukaan bulan saat astronot lepas landas. */
@@ -301,7 +345,8 @@
     if (finished) return;
     finished = true;
     disarm();
-    els.doneKm.textContent = fmtKm(state.km || lastKm);
+    const total = (state && typeof state.score === 'number') ? state.score : lastScore;
+    els.doneScore.textContent = HUD.formatFull(total);
     els.doneOverlay.classList.add('active');
     HUD.starConfetti(els.confetti, 40, 3500);
     setTimeout(() => { location.href = '/result'; }, 2600);

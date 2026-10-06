@@ -12,14 +12,13 @@
     scoreValue: document.getElementById('scoreValue'),
     scoreCircle: document.getElementById('scoreCircle'),
     statBenar: document.getElementById('statBenar'),
-    statKm: document.getElementById('statKm'),
+    statNilai: document.getElementById('statNilai'),
+    statStreak: document.getElementById('statStreak'),
     statLevel: document.getElementById('statLevel'),
     rumusList: document.getElementById('rumusList'),
     review: document.getElementById('review'),
     confetti: document.getElementById('confetti'),
   };
-
-  function fmtKm(km) { return Number(km).toLocaleString('id-ID'); }
 
   function keyOf(list, value) {
     const i = list.findIndex((x) => x === value);
@@ -72,18 +71,23 @@
     els.nama.textContent = r.nama + ' · Absen ' + r.absen;
     document.body.setAttribute('data-sky', String(r.level));
 
-    // Nilai count-up + ring
-    HUD.countUp(els.scoreValue, 0, r.nilai, 1200);
+    // Ring = streak terpanjang (dari 10). Angka tengah = total poin.
+    const maxStreak = Number(r.maxStreak) || 0;
+    const ringFrac = Math.max(0, Math.min(1, maxStreak / 10));
+    HUD.countUp(els.scoreValue, 0, r.score || 0, 1300, HUD.formatFull);
+
     const circ = 2 * Math.PI * 52; // ~327
     els.scoreCircle.style.strokeDasharray = circ;
     els.scoreCircle.style.strokeDashoffset = circ;
     requestAnimationFrame(() => {
-      els.scoreCircle.style.strokeDashoffset = String(circ * (1 - r.nilai / 100));
-      els.scoreCircle.style.stroke = r.nilai >= 70 ? 'var(--benar)' : r.nilai >= 40 ? 'var(--emas)' : 'var(--salah)';
+      els.scoreCircle.style.strokeDashoffset = String(circ * (1 - ringFrac));
+      els.scoreCircle.style.stroke =
+        maxStreak >= 5 ? 'var(--emas)' : maxStreak >= 3 ? 'var(--benar)' : 'var(--neon-cyan)';
     });
 
     els.statBenar.textContent = r.benar + '/' + r.total;
-    els.statKm.textContent = fmtKm(r.km);
+    if (els.statNilai) els.statNilai.textContent = String(r.nilai);
+    if (els.statStreak) els.statStreak.textContent = String(maxStreak);
     els.statLevel.textContent = r.label;
 
     // Rumus utama

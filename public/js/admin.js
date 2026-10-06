@@ -41,6 +41,8 @@
   }
 
   function fmtKm(km) { return Number(km || 0).toLocaleString('id-ID') + ' km'; }
+  function fmtPoin(n) { return HUD ? HUD.formatFull(n) : Number(n || 0).toLocaleString('id-ID'); }
+  function fmtPoinCompact(n) { return HUD ? HUD.formatCompact(n) : String(n || 0); }
 
   function medal(rank) {
     return rank;
@@ -100,11 +102,15 @@
     const rata = selesai
       ? Math.round(attempts.filter((a) => a.status === 'selesai').reduce((s, a) => s + a.nilai, 0) / selesai)
       : 0;
+    const rataPoin = selesai
+      ? Math.round(attempts.filter((a) => a.status === 'selesai').reduce((s, a) => s + (a.score || 0), 0) / selesai)
+      : 0;
 
     els.adminStats.innerHTML =
       statCard(total, 'Total Peserta') +
       statCard(selesai, 'Selesai') +
       statCard(terkunci, 'Terkunci') +
+      statCard(fmtPoinCompact(rataPoin), 'Rata-rata Poin') +
       statCard(rata, 'Rata-rata Nilai');
 
     renderScoreboard();
@@ -125,12 +131,14 @@
         '<td class="rank' + rankCls + '">' + medal(a.rank) + '</td>' +
         '<td>' + escapeHtml(a.nama) + '</td>' +
         '<td>' + escapeHtml(a.absen) + '</td>' +
-        '<td><strong>' + a.nilai + '</strong></td>' +
+        '<td><strong class="cell-poin">' + fmtPoin(a.score) + '</strong></td>' +
+        '<td>' + a.nilai + '</td>' +
+        '<td>' + (a.maxStreak || 0) + '</td>' +
         '<td>' + a.benar + '/' + a.total + '</td>' +
         '<td>' + fmtKm(a.km) + '</td>' +
         '<td>' + statusBadge(a.status) + '</td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="7" style="text-align:center;color:#a0a3c4">Belum ada data.</td></tr>';
+    }).join('') || '<tr><td colspan="9" style="text-align:center;color:#a0a3c4">Belum ada data.</td></tr>';
   }
 
   function renderTable() {
@@ -159,13 +167,15 @@
       return '<tr class="' + (isNew ? 'row-new' : '') + '">' +
         '<td>' + escapeHtml(a.nama) + '</td>' +
         '<td>' + escapeHtml(a.absen) + '</td>' +
-        '<td><strong>' + a.nilai + '</strong></td>' +
+        '<td><strong class="cell-poin">' + fmtPoin(a.score) + '</strong></td>' +
+        '<td>' + a.nilai + '</td>' +
+        '<td>' + (a.maxStreak || 0) + '</td>' +
         '<td>' + a.benar + '/' + a.total + '</td>' +
         '<td>' + (a.pelanggaran > 0 ? a.pelanggaran : '—') + '</td>' +
         '<td>' + statusBadge(a.status) + '</td>' +
         '<td><div class="row-actions">' + actions.join('') + '</div></td>' +
       '</tr>';
-    }).join('') || '<tr><td colspan="7" style="text-align:center;color:#a0a3c4">Tidak ada data.</td></tr>';
+    }).join('') || '<tr><td colspan="9" style="text-align:center;color:#a0a3c4">Tidak ada data.</td></tr>';
 
     // update known ids
     (data.attempts || []).forEach((a) => knownIds.add(a.id));
@@ -203,13 +213,15 @@
   els.exportBtn.addEventListener('click', () => {
     const rows = data.attempts || [];
     if (!rows.length) { API.toast('Belum ada data untuk diexport.', 'err'); return; }
-    const header = ['Nama', 'No Absen', 'Nilai', 'Benar', 'Total', 'Ketinggian (km)', 'Status', 'Pelanggaran'];
+    const header = ['Nama', 'No Absen', 'Poin', 'Nilai', 'Streak Maks', 'Benar', 'Total', 'Ketinggian (km)', 'Status', 'Pelanggaran'];
     const lines = [header.join(',')];
-    rows.slice().sort((a, b) => b.nilai - a.nilai).forEach((a) => {
+    rows.slice().sort((a, b) => (b.score || 0) - (a.score || 0)).forEach((a) => {
       lines.push([
         '"' + a.nama.replace(/"/g, '""') + '"',
         '"' + a.absen + '"',
+        a.score || 0,
         a.nilai,
+        a.maxStreak || 0,
         a.benar,
         a.total,
         a.km,

@@ -4,10 +4,11 @@ Web kuis matematika bertema astronot yang **terbang makin tinggi** setiap jawaba
 Dibangun untuk dijalankan **online** (Vercel + Turso) maupun **lokal** untuk uji coba.
 
 - 🎯 10 soal cerita **Permutasi**, 4 pilihan, urutan diacak
-- 🧑‍🚀 Astronot naik 10 tingkat (10.000 → 100.000 km); salah = **nabrak bulan** 💥
-- 🏆 Panel admin: tabel nilai, scoreboard, izin lanjut, reset, hapus, export CSV
+- 🧑‍🚀 Astronot naik 10 tingkat (10.000 → 100.000 km) tiap jawaban benar
+- 🔥 **Sistem poin COMBO**: benar berturut-turut = poin berlipat ×2, api roket makin besar (canvas)
+- 🏆 Panel admin: tabel poin & nilai, scoreboard, izin lanjut, reset, hapus, export CSV
 - 🔒 Anti-cheat: keluar halaman / pindah tab / layar mati → **langsung terkunci**, butuh izin admin
-- 📖 Setelah selesai: nilai + pembahasan **rumus & langkah pengerjaan**
+- 📖 Setelah selesai: total poin + pembahasan **rumus & langkah pengerjaan**
 
 ---
 
@@ -31,7 +32,7 @@ math-project/
 ├── public/                  # Frontend statis (di-deploy Vercel)
 │   ├── index.html  quiz.html  result.html  admin.html
 │   ├── css/style.css
-│   └── js/{api,space,hud,app,quiz,result,admin}.js
+│   └── js/{api,space,hud,flame,app,quiz,result,admin}.js
 ├── dev-server.js            # server lokal untuk uji coba
 ├── vercel.json
 ├── .env.example
@@ -113,22 +114,25 @@ Setelah selesai:
 
 | Aturan                | Nilai                                            |
 | --------------------- | ------------------------------------------------ |
-| Nilai                 | 10 soal × 10 = **0–100**                          |
+| Poin (COMBO)          | Benar ke-n berturut-turut = `1.000 × 2^(n-1)` (maks 10 benar = **1.023.000 poin**) |
+| Jawaban salah         | Poin **tidak berkurang**, tetapi COMBO **reset** ke +1.000 |
+| Nilai                 | 10 soal × 10 = **0–100** (tetap dihitung, tampil di hasil & admin) |
+| Ketinggian astronot   | Naik 10 tingkat per jawaban benar (terpisah dari poin) |
 | Pembahasan            | Di halaman hasil (bukan saat mengerjakan)        |
 | Timer                 | Tidak ada                                        |
 | Suara                 | Tidak ada                                        |
 | Urutan soal & pilihan | Diacak                                           |
-| Keluar / pindah tab   | **Langsung terkunci** → izin admin → **lanjut dari soal terakhir** |
+| Keluar / pindah tab   | **Langsung terkunci** → izin admin → **lanjut dari soal terakhir** (poin & COMBO tersimpan) |
 | Setelah selesai       | Ulang perlu izin admin                          |
 | Nama duplikat         | Ditolak; admin harus hapus dulu untuk pakai nama sama |
 
 ## 🛠️ Panel Admin
 
 - Login password (`ADMIN_PASSWORD`)
-- Statistik: total peserta, selesai, terkunci, rata-rata
-- **Scoreboard** (medali 🥇🥈🥉)
-- **Semua peserta**: cari nama/absen, filter status
-- Aksi: **🔓 Izinkan Lanjut** (untuk yang terkunci), **↺ Reset**, **🗑 Hapus**
+- Statistik: total peserta, selesai, terkunci, **rata-rata poin & rata-rata nilai**
+- **Scoreboard** (diurutkan berdasarkan **poin**)
+- **Semua peserta**: cari nama/absen, filter status; kolom **Poin · Nilai · Streak**
+- Aksi: **Izinkan Lanjut** (untuk yang terkunci), **Reset**, **Hapus**
 - **⬇ Export CSV** & auto-refresh
 
 ---
