@@ -517,11 +517,14 @@
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('blur', onBlur);
     window.addEventListener('pagehide', onPageHide);
+    window.addEventListener('beforeunload', onBeforeUnload);
     // Blokir klik kanan & shortcut menyalin / DevTools.
     document.addEventListener('contextmenu', block);
     document.addEventListener('copy', block);
     document.addEventListener('cut', block);
     document.addEventListener('paste', block);
+    document.addEventListener('selectstart', block);
+    document.addEventListener('dragstart', block);
     document.addEventListener('keydown', onKey);
   }
 
@@ -530,6 +533,14 @@
     document.removeEventListener('visibilitychange', onVisibility);
     window.removeEventListener('blur', onBlur);
     window.removeEventListener('pagehide', onPageHide);
+    window.removeEventListener('beforeunload', onBeforeUnload);
+    document.removeEventListener('contextmenu', block);
+    document.removeEventListener('copy', block);
+    document.removeEventListener('cut', block);
+    document.removeEventListener('paste', block);
+    document.removeEventListener('selectstart', block);
+    document.removeEventListener('dragstart', block);
+    document.removeEventListener('keydown', onKey);
   }
 
   function block(e) { e.preventDefault(); }
@@ -550,6 +561,11 @@
     triggerViolation();
   }
   function onPageHide() { triggerViolation(true); }
+  function onBeforeUnload(e) {
+    // Popup native browser saat siswa mencoba refresh/menutup tab.
+    e.preventDefault();
+    e.returnValue = '';
+  }
 
   let violationSent = false;
   function triggerViolation(beacon) {
@@ -644,6 +660,9 @@
     document.body.appendChild(gate);
     gate.querySelector('#gateBtn').addEventListener('click', () => {
       gate.remove();
+      // Setelah siswa menekan tombol siap, barulah refresh/pindah memunculkan
+      // popup native browser. Sebelumnya masih aman.
+      window.addEventListener('beforeunload', onBeforeUnload);
       done();
     });
   }
@@ -657,6 +676,9 @@
       showGate(() => { arm(); });
     } else {
       arm();
+      // Jika tidak ada gerbang (status selain mengerjakan), jangan pasang
+      // popup beforeunload agar halaman hasil/locked tidak terasa "nyangkut".
+      window.addEventListener('beforeunload', onBeforeUnload);
     }
   }
 

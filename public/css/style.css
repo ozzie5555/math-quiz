@@ -391,6 +391,15 @@ body.page-result::after {
   display: flex;
   flex-direction: column;
   padding-bottom: var(--safe-bottom);
+  /* Anti-cheat: jangan bisa seleksi/salin teks di halaman kuis */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.page-quiz input,
+.page-quiz textarea {
+  user-select: text;
+  -webkit-user-select: text;
 }
 .hud {
   position: sticky;
