@@ -30,8 +30,10 @@
     dangerFlash: document.getElementById('dangerFlash'),
     violationOverlay: document.getElementById('violationOverlay'),
     lockedOverlay: document.getElementById('lockedOverlay'),
-    doneOverlay: document.getElementById('doneOverlay'),
-    doneScore: document.getElementById('doneScore'),
+    finaleOverlay: document.getElementById('finaleOverlay'),
+    finaleScore: document.getElementById('finaleScore'),
+    finaleBar: document.getElementById('finaleBar'),
+    finaleBtn: document.getElementById('finaleBtn'),
     checkAccessBtn: document.getElementById('checkAccessBtn'),
     lockedHint: document.getElementById('lockedHint'),
     confetti: document.getElementById('confetti'),
@@ -53,6 +55,7 @@
   let armed = false; // anti-cheat baru aktif setelah konfirmasi
   let pendingOption = null;
   let pendingBtn = null;
+  let boostFlyMs = 1000; // durasi terbang terakhir (untuk delay lanjut soal)
 
   const KEY_LABELS = ['A', 'B', 'C', 'D'];
 
@@ -66,33 +69,53 @@
   }
 
   /**
-   * Tinggi dasar (px dari bawah panggung) tempat astronot mulai.
-   * Mengikuti puncak bola bulan (bulan diletakkan di top:80% via CSS),
-   * dengan sedikit margin agar kaki tampak mendarat di permukaan bulan.
+   * Tinggi dasar (px dari bawah panggung) tempat astronot mulai — di atas
+   * puncak bola bulan. Dipakai offsetTop/offsetHeight (layout, ABAIKAN
+   * transform) supaya nilainya tetap stabil walau bulan dianimasikan turun.
    */
   function baseBottom() {
     const stageH = els.stage.clientHeight;
-    const moon = els.moon.getBoundingClientRect();
-    const stageRect = els.stage.getBoundingClientRect();
-    const moonDome = (moon.top - stageRect.top) + moon.height * 0.08;
+    const moonTop = els.moon.offsetTop;
+    const moonH = els.moon.offsetHeight;
+    const moonDome = moonTop + moonH * 0.08;
     return Math.max(stageH * 0.12, stageH - moonDome + 2);
   }
 
-  /** Hitung posisi astronot berdasarkan tingkat (0..10). */
+  /** Posisi astronot (naik) berdasarkan tingkat (0..10). */
   function astroBottomFor(level) {
     const stageH = els.stage.clientHeight;
     const astroH = els.astro.offsetHeight || 110;
     const base = baseBottom();
     const topLimit = 40; // ruang untuk label angka di atas astronot
-    const maxBottom = Math.max(base + 90, stageH - astroH - topLimit);
+    const maxBottom = Math.max(base + 60, stageH - astroH - topLimit);
     const t = Math.max(0, Math.min(10, level)) / 10;
-    // linear: tiap jawaban benar naik dengan jarak yang terasa konsisten
     return base + t * (maxBottom - base);
   }
 
+  /**
+   * Efek "kamera naik": bulan turun seiring astronot naik, supaya terasa
+   * benar-benar terbang meninggalkan permukaan (bukan terbang di tempat).
+   */
+  function moonDropFor(level) {
+    const stageH = els.stage.clientHeight;
+    const t = Math.max(0, Math.min(10, level)) / 10;
+    return t * (stageH * 0.95);
+  }
+
+  /** Terapkan posisi astronot + bulan + parallax bintang untuk sebuah tingkat. */
   function moveAstro(level, animate) {
-    els.astro.style.transition = animate === false ? 'none' : '';
+    const noAnim = animate === false;
+    els.astro.style.transition = noAnim ? 'none' : '';
+    els.moon.style.transition = noAnim ? 'none' : '';
     els.astro.style.bottom = astroBottomFor(level) + 'px';
+    els.stage.style.setProperty('--moon-y', moonDropFor(level) + 'px');
+    if (window.Space) window.Space.setDrift(-Math.max(0, Math.min(10, level)) * 45);
+    if (noAnim) {
+      requestAnimationFrame(() => {
+        els.astro.style.transition = '';
+        els.moon.style.transition = '';
+      });
+    }
   }
 
   function setProgress(answered, total) {
@@ -160,7 +183,13 @@
       btn.type = 'button';
       btn.className = 'option';
       btn.dataset.value = opt;
-      btn.innerHTML = '<span class="option__key">' + KEY_LABELS[i] + '</span><span class="option__txt"></span>';
+      btn.innerHTML =
+        '<span class="option__fill" aria-hidden="true"></span>' +
+        '<span class="option__key">' + KEY_LABELS[i] + '</span>' +
+        '<span class="option__txt"></span>' +
+        '<span class="option__mark" aria-hidden="true">' +
+          checkSvg() + crossSvg() +
+        '</span>';
       btn.querySelector('.option__txt').textContent = opt;
       btn.addEventListener('click', () => onChoose(btn, opt));
       els.options.appendChild(btn);
@@ -170,6 +199,20 @@
   function keyOf(options, value) {
     const i = options.findIndex((o) => String(o) === String(value));
     return i >= 0 ? KEY_LABELS[i] : '?';
+  }
+
+  /** SVG tanda centang (dianimasikan dengan stroke-draw). */
+  function checkSvg() {
+    return '<svg class="mark mark--check" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M5 13l4 4L19 7"/></svg>';
+  }
+
+  /** SVG tanda silang (dianimasikan dengan stroke-draw). */
+  function crossSvg() {
+    return '<svg class="mark mark--cross" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+      'stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M6 6l12 12M18 6L6 18"/></svg>';
   }
 
   /** Tampilkan kunci jawaban setelah menjawab. */
@@ -301,34 +344,72 @@
       if (r.finished) { showDone({ score: r.score, km: r.km }); return; }
       answering = false;
       await refreshState();
-    }, r.correct ? 1500 : 1500);
+    }, r.correct ? (boostFlyMs + 500) : 1500);
   }
 
   /* --------------------------- animasi --------------------------- */
   function boostAstro(level, km, points, streak) {
-    // restart animasi dorong
+    // Durasi terbang bertambah sesuai COMBO (streak), dengan batas maksimum.
+    const s = Math.max(1, Number(streak) || 1);
+    const extra = Math.min((s - 1) * 220, 1800);   // +220ms per combo, cap +1.8s
+    const flyMs = 1000 + extra;                    // 1.0s .. 2.8s
+    boostFlyMs = flyMs;
+
+    // Set durasi transisi (dipakai astronot & bulan) di panggung.
+    els.stage.style.setProperty('--fly-ms', flyMs + 'ms');
+    els.astro.style.setProperty('--fly-scale', Math.min(1 + (s - 1) * 0.05, 1.4));
+
+    // restart animasi dorong (goyangan badan saja)
     els.astro.classList.remove('astro--boost');
     void els.astro.offsetWidth;
     els.astro.classList.add('astro--boost', 'astro--pulse');
-    window.Space.burstDrift(-80 * level);
 
-    // Naik halus ke ketinggian baru (transisi CSS pada `bottom`).
-    const target = astroBottomFor(level);
-    els.astro.style.bottom = target + 'px';
+    // Naik ke ketinggian baru — bulan ikut turun (efek kamera).
+    moveAstro(level, true);
+
+    // Percepat drift bintang sementara agar terasa melesat naik.
+    window.Space.burstDrift(-140 - 30 * level);
 
     // Atur arah miring agar tiap tingkat bergantian (terasa hidup).
     const dir = (level % 2 === 0) ? 1 : -1;
     els.astro.style.setProperty('--dir', dir);
 
     launchDust();
+    starBurst(s);
 
     // popup "+poin" melayang dari astronot
     if (points > 0) popPoints(points, streak);
 
     setTimeout(() => {
       els.astro.classList.remove('astro--boost');
-    }, 1000);
-    setTimeout(() => els.astro.classList.remove('astro--pulse'), 680);
+    }, flyMs);
+    setTimeout(() => els.astro.classList.remove('astro--pulse'), Math.min(680, flyMs));
+  }
+
+  /** Ledakan bintang di sekitar astronot saat jawaban benar (makin banyak saat combo). */
+  function starBurst(streak) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    const ar = els.astro.getBoundingClientRect();
+    const sr = els.stage.getBoundingClientRect();
+    const cx = ar.left - sr.left + ar.width / 2;
+    const cy = ar.top - sr.top + ar.height / 2;
+    const base = window.innerWidth < 480 ? 9 : 15;
+    const bonus = Math.min((Math.max(1, streak || 1) - 1) * 2, 18); // makin banyak saat combo
+    const n = base + bonus;
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement('span');
+      s.className = 'stage__burst';
+      const ang = (Math.PI * 2 * i) / n + Math.random() * 0.4;
+      const dist = 40 + Math.random() * 46;
+      s.style.left = cx + 'px';
+      s.style.top = cy + 'px';
+      s.style.setProperty('--bx', (Math.cos(ang) * dist).toFixed(0) + 'px');
+      s.style.setProperty('--by', (Math.sin(ang) * dist).toFixed(0) + 'px');
+      s.style.animationDelay = (Math.random() * 0.08) + 's';
+      els.stage.appendChild(s);
+      setTimeout(() => s.remove(), 900);
+    }
   }
 
   /** Popup angka poin melayang di atas astronot. */
@@ -378,7 +459,14 @@
     els.dangerFlash.classList.add('on');
     if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60]); } catch { /* ignore */ } }
 
-    // astronot hanya bergoyang ringan (tetap di posisinya)
+    // kartu soal bergetar singkat (glitch) + astronot bergoyang ringan
+    const card = document.getElementById('questionCard');
+    if (card) {
+      card.classList.remove('glitch');
+      void card.offsetWidth;
+      card.classList.add('glitch');
+      setTimeout(() => card.classList.remove('glitch'), 500);
+    }
     els.astro.classList.add('astro--shake');
     setTimeout(() => els.astro.classList.remove('astro--shake'), 500);
 
@@ -393,11 +481,34 @@
     if (finished) return;
     finished = true;
     disarm();
+
     const total = (state && typeof state.score === 'number') ? state.score : lastScore;
-    els.doneScore.textContent = HUD.formatFull(total);
-    els.doneOverlay.classList.add('active');
-    HUD.starConfetti(els.confetti, 40, 3500);
-    setTimeout(() => { location.href = '/result'; }, 2600);
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Kosongkan panggung agar fokus ke layar finale
+    els.finaleOverlay.classList.add('active');
+    els.finaleScore.textContent = '0';
+    els.finaleBar.style.width = '0%';
+    els.finaleBtn.classList.remove('show');
+
+    // Hitung 0 -> skor akhir (~4s)
+    const DUR = reduce ? 0 : 4000;
+    const startTime = performance.now();
+    function tick(now) {
+      const t = DUR === 0 ? 1 : Math.min(1, (now - startTime) / DUR);
+      const eased = 1 - Math.pow(1 - t, 2);
+      const val = Math.round(total * eased);
+      els.finaleScore.textContent = HUD.formatFull(val);
+      els.finaleBar.style.width = Math.round(t * 100) + '%';
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        els.finaleScore.textContent = HUD.formatFull(total);
+        els.finaleScore.classList.add('done');
+        els.finaleBtn.classList.add('show');
+      }
+    }
+    requestAnimationFrame(tick);
   }
 
   /* --------------------------- anti-cheat --------------------------- */

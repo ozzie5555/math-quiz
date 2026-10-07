@@ -128,13 +128,23 @@
     </div>
   </div>
 
-  <!-- Overlay selesai -->
-  <div class="overlay overlay--done" id="doneOverlay" aria-hidden="true">
-    <div class="done card glass">
-      <div class="done__mark" aria-hidden="true"></div>
-      <h2 class="done__title">MISI SELESAI</h2>
-      <p class="done__text">Total poin: <strong id="doneScore">0</strong> poin</p>
-      <a class="btn btn--primary" href="/result" id="toResultBtn">Lihat Hasil &amp; Pembahasan</a>
+  <!-- Layar finale: hitung skor akhir -->
+  <div class="overlay overlay--finale" id="finaleOverlay" aria-hidden="true">
+    <div class="finale">
+      <div class="finale__astro" id="finaleAstro" aria-hidden="true">
+        <picture>
+          <source srcset="/assets/astro-fly.webp" type="image/webp" />
+          <img src="/assets/astro-fly.png" alt="" width="245" height="432" decoding="async" />
+        </picture>
+        <span class="finale__flame"></span>
+      </div>
+
+      <div class="finale__panel">
+        <p class="finale__label">TOTAL POIN</p>
+        <p class="finale__score" id="finaleScore">0</p>
+        <div class="finale__bar"><span class="finale__barfill" id="finaleBar"></span></div>
+        <a class="btn btn--primary finale__cta" href="/result" id="finaleBtn">Lihat Hasil &amp; Pembahasan</a>
+      </div>
     </div>
   </div>
 
