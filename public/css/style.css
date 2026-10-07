@@ -1071,6 +1071,16 @@ body.page-result::after {
   -webkit-backdrop-filter: blur(8px);
   z-index: 65;
 }
+/* popup konfirmasi admin — tanpa kotak jawaban (pakai deskripsi teks) */
+.overlay--admin-confirm .confirm { max-width: 360px; }
+.overlay--admin-confirm .confirm__title { margin-bottom: 10px; }
+.overlay--admin-confirm .confirm__choice { display: none; }
+.overlay--admin-confirm .confirm__actions { grid-template-columns: 1fr 1.2fr; }
+.overlay--admin-confirm .confirm__btn--ok.confirm__btn--danger {
+  background: linear-gradient(120deg, #ff4d6d, #ff8a5c);
+  color: #1a050c;
+}
+.overlay--admin-confirm .confirm__btn--ok.confirm__btn--danger:hover { background: linear-gradient(120deg, #ff6d87, #ffa06b); }
 .confirm {
   width: 100%;
   max-width: 320px;
@@ -1122,6 +1132,13 @@ body.page-result::after {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.confirm__text {
+  margin: 0 0 18px;
+  color: var(--teks-dim);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.confirm__text strong { color: var(--teks); font-weight: 700; }
 .confirm__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1169,6 +1186,94 @@ body.page-result::after {
   color: #06121a;
   border-color: var(--neon-cyan);
 }
+
+/* ---------- Leaderboard (admin) ---------- */
+.leaderboard { display: flex; flex-direction: column; gap: 10px; }
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+.lb-row:hover { transform: translateY(-2px); border-color: rgba(0, 229, 255, 0.4); background: rgba(0, 229, 255, 0.06); }
+.lb-row--top1 { border-color: rgba(255, 209, 102, 0.5); background: linear-gradient(180deg, rgba(255,209,102,0.12), rgba(255,209,102,0.03)); }
+.lb-row--top2 { border-color: rgba(215, 220, 232, 0.35); background: linear-gradient(180deg, rgba(215,220,232,0.08), rgba(215,220,232,0.02)); }
+.lb-row--top3 { border-color: rgba(226, 160, 106, 0.45); background: linear-gradient(180deg, rgba(226,160,106,0.1), rgba(226,160,106,0.02)); }
+.lb-rank {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.92rem;
+  color: var(--teks-dim);
+}
+.lb-row--top1 .lb-rank { color: var(--emas); text-shadow: 0 0 12px rgba(255, 209, 102, 0.8); }
+.lb-row--top2 .lb-rank { color: #d7dce8; }
+.lb-row--top3 .lb-rank { color: #e2a06a; }
+.lb-ava {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(0, 229, 255, 0.28), rgba(168, 85, 247, 0.32));
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #eaf2ff;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.55);
+  letter-spacing: 0.02em;
+}
+.lb-row--top1 .lb-ava {
+  background: linear-gradient(160deg, rgba(255, 209, 102, 0.35), rgba(255, 159, 28, 0.3));
+  border-color: rgba(255, 209, 102, 0.55);
+  color: #1a1206;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+.lb-row--top2 .lb-ava {
+  background: linear-gradient(160deg, rgba(215, 220, 232, 0.3), rgba(160, 170, 200, 0.26));
+  border-color: rgba(215, 220, 232, 0.5);
+}
+.lb-row--top3 .lb-ava {
+  background: linear-gradient(160deg, rgba(226, 160, 106, 0.34), rgba(200, 120, 70, 0.28));
+  border-color: rgba(226, 160, 106, 0.55);
+}
+.lb-main { flex: 1 1 auto; min-width: 0; }
+.lb-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: var(--teks);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.lb-absen { font-size: 0.74rem; color: var(--teks-dim); }
+.lb-side { flex: 0 0 auto; text-align: right; }
+.lb-score {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.02rem;
+  color: var(--emas);
+  font-variant-numeric: tabular-nums;
+}
+.lb-meta { font-size: 0.7rem; color: var(--teks-dim); margin-top: 2px; }
+.lb-empty { text-align: center; color: var(--teks-dim); padding: 22px; font-size: 0.92rem; }
 
 .overlay--alarm { background: rgba(20, 2, 8, 0.9); animation: glitch 0.35s steps(2) 3; }
 .alarm { text-align: center; }

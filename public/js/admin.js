@@ -12,7 +12,7 @@
     admin: document.getElementById('admin'),
     adminSub: document.getElementById('adminSub'),
     adminStats: document.getElementById('adminStats'),
-    scoreBody: document.querySelector('#scoreTable tbody'),
+    leaderboard: document.getElementById('leaderboard'),
     dataBody: document.querySelector('#dataTable tbody'),
     searchInput: document.getElementById('searchInput'),
     statusFilter: document.getElementById('statusFilter'),
@@ -21,12 +21,18 @@
     exportBtn: document.getElementById('exportBtn'),
     logoutBtn: document.getElementById('logoutBtn'),
     lastUpdated: document.getElementById('lastUpdated'),
+    confirmOverlay: document.getElementById('confirmOverlay'),
+    confirmTitle: document.getElementById('confirmTitle'),
+    confirmText: document.getElementById('confirmText'),
+    confirmOk: document.getElementById('confirmOk'),
+    confirmCancel: document.getElementById('confirmCancel'),
   };
 
   let password = API.load('mq_admin_pw') || '';
   let data = { attempts: [], scoreboard: [] };
   let refreshTimer = null;
   let knownIds = new Set();
+  let pendingAction = null; // { act, id, nama, labels }
 
   const STATUS_LABEL = { mengerjakan: 'Mengerjakan', selesai: 'Selesai', terkunci: 'Terkunci' };
 
@@ -43,10 +49,6 @@
   function fmtKm(km) { return Number(km || 0).toLocaleString('id-ID') + ' km'; }
   function fmtPoin(n) { return HUD ? HUD.formatFull(n) : Number(n || 0).toLocaleString('id-ID'); }
   function fmtPoinCompact(n) { return HUD ? HUD.formatCompact(n) : String(n || 0); }
-
-  function medal(rank) {
-    return rank;
-  }
 
   /* ------------------------------ login ------------------------------ */
   els.loginForm.addEventListener('submit', async (e) => {
@@ -126,20 +128,25 @@
 
   function renderScoreboard() {
     const rows = (data.scoreboard || []).slice(0, 20);
-    els.scoreBody.innerHTML = rows.map((a) => {
-      const rankCls = a.rank <= 3 ? ' rank--' + a.rank : '';
-      return '<tr>' +
-        '<td class="rank' + rankCls + '">' + medal(a.rank) + '</td>' +
-        '<td>' + escapeHtml(a.nama) + '</td>' +
-        '<td>' + escapeHtml(a.absen) + '</td>' +
-        '<td><strong class="cell-poin">' + fmtPoin(a.score) + '</strong></td>' +
-        '<td>' + a.nilai + '</td>' +
-        '<td>' + (a.maxStreak || 0) + '</td>' +
-        '<td>' + a.benar + '/' + a.total + '</td>' +
-        '<td>' + fmtKm(a.km) + '</td>' +
-        '<td>' + statusBadge(a.status) + '</td>' +
-      '</tr>';
-    }).join('') || '<tr><td colspan="9" style="text-align:center;color:#a0a3c4">Belum ada data.</td></tr>';
+    els.leaderboard.innerHTML = rows.map((a) => {
+      const topCls = a.rank <= 3 ? ' lb-row--top' + a.rank : '';
+      const nama = escapeHtml(a.nama || 'Tanpa Nama');
+      const absen = escapeHtml(String(a.absen ?? '—'));
+      const rawName = (a.nama || '').trim();
+      const initial = rawName ? rawName.charAt(0).toUpperCase() : '?';
+      return '<div class="lb-row' + topCls + '">' +
+        '<div class="lb-rank">' + a.rank + '</div>' +
+        '<div class="lb-ava" aria-hidden="true">' + escapeHtml(initial) + '</div>' +
+        '<div class="lb-main">' +
+          '<p class="lb-name">' + nama + '</p>' +
+          '<div class="lb-absen">Absen ' + absen + '</div>' +
+        '</div>' +
+        '<div class="lb-side">' +
+          '<div class="lb-score">' + fmtPoin(a.score) + '</div>' +
+          '<div class="lb-meta">' + statusBadge(a.status) + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('') || '<div class="lb-empty">Belum ada data.</div>';
   }
 
   function renderTable() {
@@ -189,20 +196,63 @@
     const act = btn.getAttribute('data-act');
     const id = btn.getAttribute('data-id');
     const item = (data.attempts || []).find((a) => a.id === id);
-    const nama = item ? item.nama : '';
+    if (!item) return;
+
+    openConfirm(act, item);
+  });
+
+  function openConfirm(act, item) {
+    const labels = {
+      unlock: { title: 'Izinkan Melanjutkan', verb: 'mengizinkan', action: 'unlock', cls: '' },
+      reset: { title: 'Reset Nilai', verb: 'me-reset', action: 'reset', cls: 'confirm__btn--danger' },
+      delete: { title: 'Hapus Data', verb: 'menghapus', action: 'delete', cls: 'confirm__btn--danger' },
+    };
+    const cfg = labels[act];
+    if (!cfg) return;
+
+    pendingAction = { act, id: item.id, nama: item.nama, absen: item.absen, title: cfg.title, okLabel: cfg.okLabel };
+
+    els.confirmTitle.textContent = cfg.title;
+    els.confirmText.innerHTML = 'Kamu akan <strong>' + cfg.verb + '</strong> data <strong>' + escapeHtml(item.nama) + '</strong>' +
+      (item.absen ? ' (Absen <strong>' + escapeHtml(String(item.absen)) + '</strong>)' : '') + '. Lanjutkan?';
+
+    els.confirmOk.textContent = cfg.action === 'unlock' ? 'Ya, Izinkan' : 'Ya, ' + (act === 'delete' ? 'Hapus' : 'Reset');
+    els.confirmOk.classList.toggle('confirm__btn--danger', cfg.action !== 'unlock');
+
+    els.confirmOverlay.classList.add('active');
+    els.confirmOk.focus();
+  }
+
+  function closeConfirm() {
+    els.confirmOverlay.classList.remove('active');
+    pendingAction = null;
+  }
+
+  async function submitConfirmed() {
+    const p = pendingAction;
+    if (!p) return;
+    closeConfirm();
 
     const labels = { unlock: 'Izinkan lanjut', reset: 'Reset nilai', delete: 'Hapus' };
-    if (!confirm(labels[act] + ' untuk "' + nama + '"?')) return;
-
-    btn.disabled = true;
-    const res = await API.post('/api/admin/' + act, { password, id });
-    btn.disabled = false;
+    const res = await API.post('/api/admin/' + p.act, { password, id: p.id });
 
     if (res.ok) {
-      API.toast('Berhasil: ' + labels[act] + ' (' + nama + ')', 'ok');
+      API.toast('Berhasil: ' + labels[p.act] + ' (' + p.nama + ')', 'ok');
       await fetchData(true);
     } else {
       API.toast('Gagal: ' + (res.data.message || res.data.error || 'error'), 'err');
+    }
+  }
+
+  els.confirmOk.addEventListener('click', submitConfirmed);
+  els.confirmCancel.addEventListener('click', closeConfirm);
+  els.confirmOverlay.addEventListener('click', (e) => {
+    if (e.target === els.confirmOverlay) closeConfirm();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (els.confirmOverlay.classList.contains('active')) {
+      if (e.key === 'Escape') closeConfirm();
+      if (e.key === 'Enter') { e.preventDefault(); submitConfirmed(); }
     }
   });
 

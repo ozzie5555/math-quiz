@@ -52,16 +52,7 @@
 
     <section class="card glass">
       <h2 class="card__title">Scoreboard</h2>
-      <div class="table-wrap">
-        <table class="table table--score" id="scoreTable">
-          <thead>
-            <tr>
-              <th>#</th><th>Nama</th><th>Absen</th><th>Poin</th><th>Nilai</th><th>Streak</th><th>Benar</th><th>Ketinggian</th><th>Status</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
+      <div class="leaderboard" id="leaderboard"></div>
     </section>
 
     <section class="card glass">
@@ -89,6 +80,18 @@
 
     <p class="admin__foot" id="lastUpdated"></p>
   </main>
+
+  <!-- Popup konfirmasi aksi admin -->
+  <div class="overlay overlay--confirm overlay--admin-confirm" id="confirmOverlay" aria-hidden="true">
+    <div class="confirm">
+      <h3 class="confirm__title" id="confirmTitle">Konfirmasi</h3>
+      <p class="confirm__text" id="confirmText"></p>
+      <div class="confirm__actions">
+        <button class="confirm__btn confirm__btn--ubah" id="confirmCancel" type="button">Batal</button>
+        <button class="confirm__btn confirm__btn--ok" id="confirmOk" type="button">Ya, Lanjutkan</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-hidden="true"></div>
