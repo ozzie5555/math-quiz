@@ -1,47 +1,91 @@
 # 🧑‍🚀 Spaceman Math Quest — Kuis Permutasi
 
-Web kuis matematika bertema astronot yang **terbang makin tinggi** setiap jawaban benar.
-Dibangun untuk dijalankan **online** (Vercel + Turso) maupun **lokal** untuk uji coba.
+Platform kuis matematika interaktif bertema **astronot luar angkasa**. Siswa menjawab soal permutasi sambil menerbangkan astronotnya makin tinggi ke angkasa, sementara guru memantau seluruh progres secara real-time melalui panel admin.
 
-- 🎯 10 soal cerita **Permutasi**, 4 pilihan, urutan diacak
-- 🧑‍🚀 Astronot naik 10 tingkat (10.000 → 100.000 km) tiap jawaban benar
-- 🔥 **Sistem poin COMBO**: benar berturut-turut = poin berlipat ×2, api roket makin besar (canvas)
-- 🏆 Panel admin: tabel poin & nilai, scoreboard, izin lanjut, reset, hapus, export CSV
-- 🔒 Anti-cheat: keluar halaman / pindah tab / layar mati → **langsung terkunci**, butuh izin admin
-- 📖 Setelah selesai: total poin + pembahasan **rumus & langkah pengerjaan**
+Dibangun untuk berjalan **online** (Vercel + Turso) maupun **lokal** untuk simulasi di kelas.
+
+## ✨ Fitur Utama
+
+- 🎯 **10 soal cerita Permutasi** dengan 4 pilihan ganda
+- 🔀 **Urutan soal & pilihan diacak** untuk setiap siswa
+- 🧑‍🚀 **Astronot naik 10 tingkat** (10.000 → 100.000 km) setiap jawaban benar
+- 🔥 **Sistem Poin COMBO** — jawaban benar beruntun melipatgandakan poin ×2
+- 🏆 **Panel Admin** — scoreboard live, statistik, kelola peserta, ekspor ke Excel
+- 🔒 **Anti-Cheat** — keluar halaman / pindah tab / refresh akan memunculkan peringatan dan mengunci misi
+- 📖 **Pembahasan Lengkap** — rumus dan langkah pengerjaan di halaman hasil
+
+## 🧰 Tech Stack
+
+<div align="center">
+  <img src="assets/icons/html5.svg" width="44" height="44" alt="HTML5" />
+  <img src="assets/icons/css.svg" width="44" height="44" alt="CSS3" />
+  <img src="assets/icons/javascript.svg" width="44" height="44" alt="JavaScript" />
+  <img src="assets/icons/nodejs.svg" width="44" height="44" alt="Node.js" />
+  <img src="assets/icons/sqlite.svg" width="44" height="44" alt="SQLite" />
+  <img src="assets/icons/turso.svg" width="44" height="44" alt="Turso" />
+  <img src="assets/icons/vercel.svg" width="44" height="44" alt="Vercel" />
+  <img src="assets/icons/github.svg" width="44" height="44" alt="GitHub" />
+</div>
+
+| Teknologi | Keterangan |
+| --- | --- |
+| ![HTML5](assets/icons/html5.svg) HTML5 | Struktur halaman statis |
+| ![CSS3](assets/icons/css.svg) CSS3 | Tampilan bertema luar angkasa |
+| ![JavaScript](assets/icons/javascript.svg) JavaScript | Logika frontend interaktif |
+| ![Node.js](assets/icons/nodejs.svg) Node.js | Runtime server & serverless functions |
+| ![SQLite](assets/icons/sqlite.svg) SQLite | Database lokal untuk mode pengembangan |
+| ![Turso](assets/icons/turso.svg) Turso | Database cloud untuk produksi |
+| ![Vercel](assets/icons/vercel.svg) Vercel | Hosting & deployment serverless |
+| ![GitHub](assets/icons/github.svg) GitHub | Version control & CI/CD |
 
 ---
 
-## 📁 Struktur
+## 📸 Tangkapan Layar
+
+| Tampilan | Keterangan |
+| --- | --- |
+| ![Halaman Landing](assets/images/landing.png) | Halaman awal untuk mengisi nama & absen |
+| ![Halaman Kuis](assets/images/quiz.png) | Tampilan soal, astronot, dan progress misi |
+| ![Halaman Admin](assets/images/admin.png) | Scoreboard & pengelolaan peserta |
+| ![Halaman Hasil](assets/images/result.png) | Total poin, nilai, dan pembahasan |
+
+---
+
+## 📁 Struktur Proyek
 
 ```
 math-project/
 ├── api/                     # Vercel Serverless Functions
 │   ├── start.js             #   daftar misi (nama + absen), cek duplikat
 │   ├── state.js             #   status misi + soal aktif
-│   ├── answer.js            #   kirim jawaban (dikunci di server)
+│   ├── answer.js            #   kirim jawaban (divalidasi di server)
 │   ├── violation.js         #   tandai pelanggaran -> kunci
 │   ├── finish.js            #   selesaikan misi
 │   ├── result.js            #   hasil + pembahasan
-│   └── admin/{scores,unlock,reset,delete}.js
+│   └── admin/               #   scores, unlock, reset, delete
 ├── lib/
 │   ├── questions.js         # bank soal (teks, opsi, kunci, rumus, langkah)
 │   ├── db.js                # Turso (produksi) / SQLite lokal (dev)
 │   ├── game.js              # logika misi, penilaian, tingkat ketinggian
 │   └── util.js              # helper respons, auth admin, dll
 ├── public/                  # Frontend statis (di-deploy Vercel)
-│   ├── index.html  quiz.html  result.html  admin.html
+│   ├── index.html           # landing / daftar misi
+│   ├── quiz.html            # halaman kuis
+│   ├── result.html          # halaman hasil & pembahasan
+│   ├── admin.html           # panel admin
 │   ├── css/style.css
-│   └── js/{api,space,hud,flame,app,quiz,result,admin}.js
+│   ├── js/                  # app, quiz, result, admin, space, hud, api
+│   └── assets/              # gambar & ikon
+│       └── images/          # tangkapan layar untuk dokumentasi
 ├── dev-server.js            # server lokal untuk uji coba
-├── vercel.json
-├── .env.example
+├── vercel.json              # konfigurasi deploy Vercel
+├── .env.example             # contoh environment variables
 └── package.json
 ```
 
 ---
 
-## 🚀 Coba Lokal (tanpa akun apa pun)
+## 🚀 Menjalankan Secara Lokal
 
 Tanpa `TURSO_*`, aplikasi otomatis memakai **SQLite lokal** (`data/quiz.db`).
 
@@ -51,18 +95,19 @@ cp .env.example .env.local     # opsional: ubah ADMIN_PASSWORD
 npm start                      # atau: node dev-server.js
 ```
 
-Buka:
+Lalu buka:
+
 - **Siswa** : http://localhost:3000
 - **Admin** : http://localhost:3000/admin  (password default `Krisna17#`)
 
-Siswa lain di WiFi/hotspot yang sama bisa buka `http://<IP-laptop>:3000`
+Siswa lain di WiFi/hotspot yang sama dapat mengakses `http://<IP-laptop>:3000`
 (IP ditampilkan otomatis di terminal saat server mulai).
 
 ---
 
 ## ☁️ Deploy Produksi (Vercel + Turso)
 
-### 1. Buat database Turso
+### 1. Buat Database Turso
 
 ```bash
 # Install Turso CLI (Linux/macOS)
@@ -78,7 +123,7 @@ turso db tokens create spaceman-math-quest   # -> TURSO_AUTH_TOKEN
 
 Cara termudah lewat dashboard:
 
-1. Push project ini ke GitHub.
+1. Push proyek ini ke GitHub.
 2. https://vercel.com/new → import repository.
 3. Framework Preset: **Other** (biarkan otomatis; `vercel.json` sudah mengatur).
 4. Sebelum deploy, buka **Environment Variables**, tambahkan:
@@ -103,43 +148,47 @@ vercel --prod
 ```
 
 Setelah selesai:
+
 - **Siswa** : `https://<nama-proyek>.vercel.app`
 - **Admin** : `https://<nama-proyek>.vercel.app/admin`
 
-> 💡 Halaman siswa bisa dibuka dari mana saja (kuota/hotspot). Laptop tidak perlu menyala.
+> 💡 Halaman siswa dapat dibuka dari mana saja. Laptop guru tidak perlu menyala selama ujian.
 
 ---
 
 ## 🔐 Aturan Permainan
 
-| Aturan                | Nilai                                            |
-| --------------------- | ------------------------------------------------ |
-| Poin (COMBO)          | Benar ke-n berturut-turut = `1.000 × 2^(n-1)` (maks 10 benar = **1.023.000 poin**) |
-| Jawaban salah         | Poin **tidak berkurang**, tetapi COMBO **reset** ke +1.000 |
-| Nilai                 | 10 soal × 10 = **0–100** (tetap dihitung, tampil di hasil & admin) |
-| Ketinggian astronot   | Naik 10 tingkat per jawaban benar (terpisah dari poin) |
-| Pembahasan            | Di halaman hasil (bukan saat mengerjakan)        |
-| Timer                 | Tidak ada                                        |
-| Suara                 | Tidak ada                                        |
-| Urutan soal & pilihan | Diacak                                           |
-| Keluar / pindah tab   | **Langsung terkunci** → izin admin → **lanjut dari soal terakhir** (poin & COMBO tersimpan) |
-| Setelah selesai       | Ulang perlu izin admin                          |
-| Nama duplikat         | Ditolak; admin harus hapus dulu untuk pakai nama sama |
+| Aturan | Keterangan |
+| --- | --- |
+| **Poin (COMBO)** | Benar ke-n berturut-turut = `1.000 × 2^(n-1)`, maksimal 10 benar = **1.023.000 poin** |
+| **Jawaban Salah** | Poin tidak berkurang, tetapi COMBO reset ke +1.000 |
+| **Nilai** | 10 soal × 10 = **0–100** |
+| **Ketinggian Astronot** | Naik 10 tingkat per jawaban benar (terpisah dari poin) |
+| **Pembahasan** | Ditampilkan di halaman hasil, bukan saat mengerjakan |
+| **Timer** | Tidak ada |
+| **Suara** | Tidak ada |
+| **Urutan Soal & Pilihan** | Diacak untuk setiap siswa |
+| **Keluar / Pindah Tab / Refresh** | Muncul peringatan browser, misi terkunci, lanjut dari soal terakhir setelah diizinkan admin |
+| **Setelah Selesai** | Ulang perlu izin admin |
+| **Nama Duplikat** | Ditolak; admin harus menghapus data lama terlebih dahulu |
+
+---
 
 ## 🛠️ Panel Admin
 
-- Login password (`ADMIN_PASSWORD`)
-- Statistik: total peserta, selesai, terkunci, **rata-rata poin & rata-rata nilai**
-- **Scoreboard** (diurutkan berdasarkan **poin**)
-- **Semua peserta**: cari nama/absen, filter status; kolom **Poin · Nilai · Streak**
-- Aksi: **Izinkan Lanjut** (untuk yang terkunci), **Reset**, **Hapus**
-- **⬇ Export CSV** & auto-refresh
+- Login menggunakan password (`ADMIN_PASSWORD`)
+- **Statistik**: total peserta, selesai, terkunci, rata-rata poin, rata-rata nilai
+- **Scoreboard** diurutkan berdasarkan poin tertinggi
+- **Semua Peserta**: pencarian nama/absen, filter status, kolom Poin · Nilai · Streak
+- **Aksi Peserta**: Izinkan Lanjut (untuk yang terkunci), Reset, Hapus
+- **Ekspor Excel** dalam format `.xls` yang rapi
+- **Auto-refresh** data setiap 8 detik
 
 ---
 
 ## 📝 Mengubah Soal
 
-Semua soal ada di **`lib/questions.js`**. Contoh satu entri:
+Semua soal berada di **`lib/questions.js`**. Contoh satu entri:
 
 ```js
 {
@@ -153,4 +202,26 @@ Semua soal ada di **`lib/questions.js`**. Contoh satu entri:
 ```
 
 Ubah `ADMIN_PASSWORD` kapan saja lewat Environment Variables di Vercel
-( atau `.env.local` saat lokal ).
+(atau `.env.local` saat lokal).
+
+---
+
+## 🖼️ Aset & Dokumentasi
+
+Gambar-gambar untuk dokumentasi disimpan di folder:
+
+```
+public/assets/images/
+├── landing.png   # tampilan halaman awal
+├── quiz.png      # tampilan halaman kuis
+├── admin.png     # tampilan panel admin
+└── result.png    # tampilan halaman hasil
+```
+
+Untuk menambahkan tangkapan layar, simpan file dengan nama tersebut, lalu gunakan markdown:
+
+```md
+![Output](assets/images/solve.png)
+```
+
+Ganti `solve.png` dengan nama file yang diinginkan.

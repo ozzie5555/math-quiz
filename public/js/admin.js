@@ -264,12 +264,13 @@
   els.exportBtn.addEventListener('click', () => {
     const rows = data.attempts || [];
     if (!rows.length) { API.toast('Belum ada data untuk diexport.', 'err'); return; }
-    const header = ['Nama', 'No Absen', 'Poin', 'Nilai', 'Streak Maks', 'Benar', 'Total', 'Ketinggian (km)', 'Status', 'Pelanggaran'];
-    const lines = [header.join(',')];
-    rows.slice().sort((a, b) => (b.score || 0) - (a.score || 0)).forEach((a) => {
+    const header = ['No', 'Nama', 'No Absen', 'Poin', 'Nilai', 'Streak Maks', 'Benar', 'Total', 'Ketinggian (km)', 'Status', 'Pelanggaran'];
+    const lines = [header.join('\t')];
+    rows.slice().sort((a, b) => (b.score || 0) - (a.score || 0)).forEach((a, i) => {
       lines.push([
-        '"' + a.nama.replace(/"/g, '""') + '"',
-        '"' + a.absen + '"',
+        i + 1,
+        a.nama,
+        a.absen,
         a.score || 0,
         a.nilai,
         a.maxStreak || 0,
@@ -278,16 +279,16 @@
         a.km,
         a.status,
         a.pelanggaran,
-      ].join(','));
+      ].join('\t'));
     });
-    const blob = new Blob(['\ufeff' + lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/tab-separated-values;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'spaceman-math-quest_' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.download = 'spaceman-math-quest_' + new Date().toISOString().slice(0, 10) + '.xls';
     a.click();
     URL.revokeObjectURL(url);
-    API.toast('CSV diunduh.', 'ok');
+    API.toast('File Excel berhasil diunduh.', 'ok');
   });
 
   /* --------------------------- auto refresh --------------------------- */
