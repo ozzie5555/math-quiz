@@ -7,3 +7,6 @@ data/*.db
 data/*.db-*
 *.log
 .vercel
+
+# backup lokal screenshot resolusi penuh (tidak di-push)
+public/assets/images/_source/

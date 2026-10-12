@@ -1,57 +1,57 @@
-# 🧑‍🚀 Spaceman Math Quest — Kuis Permutasi
+# Spaceman Math Quest — Kuis Permutasi
 
 Platform kuis matematika interaktif bertema **astronot luar angkasa**. Siswa menjawab soal permutasi sambil menerbangkan astronotnya makin tinggi ke angkasa, sementara guru memantau seluruh progres secara real-time melalui panel admin.
 
 Dibangun untuk berjalan **online** (Vercel + Turso) maupun **lokal** untuk simulasi di kelas.
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-- 🎯 **10 soal cerita Permutasi** dengan 4 pilihan ganda
-- 🔀 **Urutan soal & pilihan diacak** untuk setiap siswa
-- 🧑‍🚀 **Astronot naik 10 tingkat** (10.000 → 100.000 km) setiap jawaban benar
-- 🔥 **Sistem Poin COMBO** — jawaban benar beruntun melipatgandakan poin ×2
-- 🏆 **Panel Admin** — scoreboard live, statistik, kelola peserta, ekspor ke Excel
-- 🔒 **Anti-Cheat** — keluar halaman / pindah tab / refresh akan memunculkan peringatan dan mengunci misi
-- 📖 **Pembahasan Lengkap** — rumus dan langkah pengerjaan di halaman hasil
+- **10 soal cerita Permutasi** dengan 4 pilihan ganda
+- **Urutan soal & pilihan diacak** untuk setiap siswa
+- **Astronot naik 10 tingkat** (10.000 → 100.000 km) setiap jawaban benar
+- **Sistem Poin COMBO** — jawaban benar beruntun melipatgandakan poin ×2
+- **Panel Admin** — scoreboard live, statistik, kelola peserta, ekspor ke Excel
+- **Anti-Cheat** — keluar halaman / pindah tab / refresh akan memunculkan peringatan dan mengunci misi
+- **Pembahasan Lengkap** — rumus dan langkah pengerjaan di halaman hasil
 
-## 🧰 Tech Stack
+## Tech Stack
 
 <div align="center">
-  <img src="public/assets/icons/html5.svg" width="44" height="44" alt="HTML5" />
-  <img src="public/assets/icons/css.svg" width="44" height="44" alt="CSS3" />
-  <img src="public/assets/icons/javascript.svg" width="44" height="44" alt="JavaScript" />
-  <img src="public/assets/icons/nodejs.svg" width="44" height="44" alt="Node.js" />
-  <img src="public/assets/icons/sqlite.svg" width="44" height="44" alt="SQLite" />
-  <img src="public/assets/icons/turso.svg" width="44" height="44" alt="Turso" />
-  <img src="public/assets/icons/vercel.svg" width="44" height="44" alt="Vercel" />
-  <img src="public/assets/icons/github.svg" width="44" height="44" alt="GitHub" />
+  <img src="public/assets/icons/html5.svg" width="30" alt="HTML5" />
+  <img src="public/assets/icons/css.svg" width="30" alt="CSS3" />
+  <img src="public/assets/icons/javascript.svg" width="30" alt="JavaScript" />
+  <img src="public/assets/icons/nodejs.svg" width="30" alt="Node.js" />
+  <img src="public/assets/icons/sqlite.svg" width="30" alt="SQLite" />
+  <img src="public/assets/icons/turso.svg" width="30" alt="Turso" />
+  <img src="public/assets/icons/vercel.svg" width="30" alt="Vercel" />
+  <img src="public/assets/icons/github.svg" width="30" alt="GitHub" />
 </div>
 
 | Teknologi | Keterangan |
 | --- | --- |
-| ![HTML5](public/assets/icons/html5.svg) HTML5 | Struktur halaman statis |
-| ![CSS3](public/assets/icons/css.svg) CSS3 | Tampilan bertema luar angkasa |
-| ![JavaScript](public/assets/icons/javascript.svg) JavaScript | Logika frontend interaktif |
-| ![Node.js](public/assets/icons/nodejs.svg) Node.js | Runtime server & serverless functions |
-| ![SQLite](public/assets/icons/sqlite.svg) SQLite | Database lokal untuk mode pengembangan |
-| ![Turso](public/assets/icons/turso.svg) Turso | Database cloud untuk produksi |
-| ![Vercel](public/assets/icons/vercel.svg) Vercel | Hosting & deployment serverless |
-| ![GitHub](public/assets/icons/github.svg) GitHub | Version control & CI/CD |
+| <img src="public/assets/icons/html5.svg" width="18" alt="HTML5"> HTML5 | Struktur halaman statis |
+| <img src="public/assets/icons/css.svg" width="18" alt="CSS3"> CSS3 | Tampilan bertema luar angkasa |
+| <img src="public/assets/icons/javascript.svg" width="18" alt="JavaScript"> JavaScript | Logika frontend interaktif |
+| <img src="public/assets/icons/nodejs.svg" width="18" alt="Node.js"> Node.js | Runtime server & serverless functions |
+| <img src="public/assets/icons/sqlite.svg" width="18" alt="SQLite"> SQLite | Database lokal untuk mode pengembangan |
+| <img src="public/assets/icons/turso.svg" width="18" alt="Turso"> Turso | Database cloud untuk produksi |
+| <img src="public/assets/icons/vercel.svg" width="18" alt="Vercel"> Vercel | Hosting & deployment serverless |
+| <img src="public/assets/icons/github.svg" width="18" alt="GitHub"> GitHub | Version control & CI/CD |
 
 ---
 
-## 📸 Tangkapan Layar
+## Tangkapan Layar
 
 | Tampilan | Keterangan |
 | --- | --- |
-| ![Halaman Landing](public/assets/images/landing.png) | Halaman awal untuk mengisi nama & absen |
-| ![Halaman Kuis](public/assets/images/quiz.png) | Tampilan soal, astronot, dan progress misi |
-| ![Halaman Admin](public/assets/images/admin.png) | Scoreboard & pengelolaan peserta |
-| ![Halaman Hasil](public/assets/images/result.png) | Total poin, nilai, dan pembahasan |
+| ![Halaman Landing](public/assets/images/landing.jpg) | Halaman awal untuk mengisi nama & absen |
+| ![Halaman Kuis](public/assets/images/quiz.jpg) | Tampilan soal, astronot, dan progress misi |
+| ![Halaman Admin](public/assets/images/admin.jpg) | Scoreboard & pengelolaan peserta |
+| ![Halaman Hasil](public/assets/images/result.jpg) | Total poin, nilai, dan pembahasan |
 
 ---
 
-## 📁 Struktur Proyek
+## Struktur Proyek
 
 ```
 math-project/
@@ -85,7 +85,7 @@ math-project/
 
 ---
 
-## 🚀 Menjalankan Secara Lokal
+## Menjalankan Secara Lokal
 
 Tanpa `TURSO_*`, aplikasi otomatis memakai **SQLite lokal** (`data/quiz.db`).
 
@@ -98,14 +98,14 @@ npm start                      # atau: node dev-server.js
 Lalu buka:
 
 - **Siswa** : http://localhost:3000
-- **Admin** : http://localhost:3000/admin  (password default `Krisna17#`)
+- **Admin** : http://localhost:3000/admin (password default `Krisna17#`)
 
 Siswa lain di WiFi/hotspot yang sama dapat mengakses `http://<IP-laptop>:3000`
 (IP ditampilkan otomatis di terminal saat server mulai).
 
 ---
 
-## ☁️ Deploy Produksi (Vercel + Turso)
+## Deploy Produksi (Vercel + Turso)
 
 ### 1. Buat Database Turso
 
@@ -128,11 +128,11 @@ Cara termudah lewat dashboard:
 3. Framework Preset: **Other** (biarkan otomatis; `vercel.json` sudah mengatur).
 4. Sebelum deploy, buka **Environment Variables**, tambahkan:
 
-| Name                 | Value                    |
+| Name | Value |
 | -------------------- | ------------------------ |
-| `ADMIN_PASSWORD`     | `Krisna17#`              |
-| `TURSO_DATABASE_URL` | `libsql://...turso.io`   |
-| `TURSO_AUTH_TOKEN`   | token dari langkah 1     |
+| `ADMIN_PASSWORD` | `Krisna17#` |
+| `TURSO_DATABASE_URL` | `libsql://...turso.io` |
+| `TURSO_AUTH_TOKEN` | token dari langkah 1 |
 
 5. **Deploy**. Vercel otomatis menyajikan `public/` sebagai statis dan `api/` sebagai serverless function.
 
@@ -152,11 +152,11 @@ Setelah selesai:
 - **Siswa** : `https://<nama-proyek>.vercel.app`
 - **Admin** : `https://<nama-proyek>.vercel.app/admin`
 
-> 💡 Halaman siswa dapat dibuka dari mana saja. Laptop guru tidak perlu menyala selama ujian.
+> Halaman siswa dapat dibuka dari mana saja. Laptop guru tidak perlu menyala selama ujian.
 
 ---
 
-## 🔐 Aturan Permainan
+## Aturan Permainan
 
 | Aturan | Keterangan |
 | --- | --- |
@@ -174,7 +174,7 @@ Setelah selesai:
 
 ---
 
-## 🛠️ Panel Admin
+## Panel Admin
 
 - Login menggunakan password (`ADMIN_PASSWORD`)
 - **Statistik**: total peserta, selesai, terkunci, rata-rata poin, rata-rata nilai
@@ -186,7 +186,7 @@ Setelah selesai:
 
 ---
 
-## 📝 Mengubah Soal
+## Mengubah Soal
 
 Semua soal berada di **`lib/questions.js`**. Contoh satu entri:
 
@@ -206,26 +206,31 @@ Ubah `ADMIN_PASSWORD` kapan saja lewat Environment Variables di Vercel
 
 ---
 
-## 🖼️ Aset & Dokumentasi
+## Aset & Dokumentasi
 
 Gambar-gambar untuk dokumentasi disimpan di folder:
 
 ```
 public/assets/images/
-├── landing.png   # tampilan halaman awal
-├── quiz.png      # tampilan halaman kuis
-├── admin.png     # tampilan panel admin
-└── result.png    # tampilan halaman hasil
+├── landing.jpg    # tampilan halaman awal
+├── quiz.jpg       # tampilan halaman kuis
+├── admin.jpg      # tampilan panel admin
+└── result.jpg     # tampilan halaman hasil
 ```
+
+Screenshot disimpan sebagai **JPEG maks 1400px** agar ringan saat dibuka di GitHub
+(total ±220 KB untuk 4 gambar). PNG resolusi penuh disimpan sebagai backup lokal di
+`public/assets/images/_source/` (di-ignore, tidak ikut ke repo).
 
 Untuk menambahkan tangkapan layar, simpan file di dalam folder tersebut, lalu rujuk
 memakai path **relatif dari root repo** (README berada di root, jadi selalu diawali `public/`):
 
 ```md
-![Halaman Soal](public/assets/images/solve.png)
+![Halaman Soal](public/assets/images/solve.jpg)
 ```
 
-> ⚠️ Jangan menulis `assets/images/...` tanpa `public/` — GitHub akan menampilkan
+> Jangan menulis `assets/images/...` tanpa `public/` — GitHub akan menampilkan
 > ikon gambar rusak karena file-nya tidak ditemukan.
 
-Ganti `solve.png` dengan nama file yang diinginkan.
+Ganti `solve.jpg` dengan nama file yang diinginkan. Setelah mengganti screenshot,
+jalankan `python3 optimize-screenshots.py` untuk membuat versi ringannya.
