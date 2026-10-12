@@ -1,31 +1,91 @@
-# Spaceman Math Quest — Kuis Permutasi
+<div align="center">
 
-Platform kuis matematika interaktif bertema **astronot luar angkasa**. Siswa menjawab soal permutasi sambil menerbangkan astronotnya makin tinggi ke angkasa, sementara guru memantau seluruh progres secara real-time melalui panel admin.
+<h1>Spaceman Math Quest</h1>
 
-Dibangun untuk berjalan **online** (Vercel + Turso) maupun **lokal** untuk simulasi di kelas.
+<p><b>Kuis permutasi interaktif bertema astronot luar angkasa.</b></p>
+
+<p>Siswa menjawab 10 soal cerita permutasi sambil menerbangkan astronotnya makin tinggi ke angkasa,<br>
+sementara guru memantau seluruh progres secara real-time melalui panel admin.</p>
+
+<p>Dapat dijalankan <b>online</b> (Vercel + Turso) maupun <b>lokal</b> untuk simulasi di kelas.</p>
+
+<p>
+  <img src="public/assets/icons/html5.svg" width="28" alt="HTML5" />
+  <img src="public/assets/icons/css.svg" width="28" alt="CSS3" />
+  <img src="public/assets/icons/javascript.svg" width="28" alt="JavaScript" />
+  <img src="public/assets/icons/nodejs.svg" width="28" alt="Node.js" />
+  <img src="public/assets/icons/sqlite.svg" width="28" alt="SQLite" />
+  <img src="public/assets/icons/turso.svg" width="28" alt="Turso" />
+  <img src="public/assets/icons/vercel.svg" width="28" alt="Vercel" />
+  <img src="public/assets/icons/github.svg" width="28" alt="GitHub" />
+</p>
+
+</div>
+
+---
+
+## Daftar Isi
+
+- [Fitur Utama](#fitur-utama)
+- [Tangkapan Layar](#tangkapan-layar)
+- [Alur Permainan](#alur-permainan)
+- [Tech Stack](#tech-stack)
+- [Struktur Proyek](#struktur-proyek)
+- [Menjalankan Secara Lokal](#menjalankan-secara-lokal)
+- [Deploy Produksi (Vercel + Turso)](#deploy-produksi-vercel--turso)
+- [Panel Admin](#panel-admin)
+- [Aturan Permainan](#aturan-permainan)
+- [Mengubah Soal](#mengubah-soal)
+
+---
 
 ## Fitur Utama
 
-- **10 soal cerita Permutasi** dengan 4 pilihan ganda
-- **Urutan soal & pilihan diacak** untuk setiap siswa
+- **10 soal cerita permutasi** dengan 4 pilihan ganda
+- **Soal & pilihan diacak** untuk setiap siswa
 - **Astronot naik 10 tingkat** (10.000 → 100.000 km) setiap jawaban benar
-- **Sistem Poin COMBO** — jawaban benar beruntun melipatgandakan poin ×2
-- **Panel Admin** — scoreboard live, statistik, kelola peserta, ekspor ke Excel
-- **Anti-Cheat** — keluar halaman / pindah tab / refresh akan memunculkan peringatan dan mengunci misi
-- **Pembahasan Lengkap** — rumus dan langkah pengerjaan di halaman hasil
+- **Sistem poin COMBO** — jawaban benar beruntun melipatgandakan poin ×2
+- **Panel admin** — scoreboard live, statistik, kelola peserta, ekspor ke Excel
+- **Anti-cheat** — keluar halaman, pindah tab, atau refresh akan memunculkan peringatan dan mengunci misi
+- **Pembahasan lengkap** — rumus dan langkah pengerjaan di halaman hasil
 
-## Tech Stack
+---
+
+## Tangkapan Layar
 
 <div align="center">
-  <img src="public/assets/icons/html5.svg" width="30" alt="HTML5" />
-  <img src="public/assets/icons/css.svg" width="30" alt="CSS3" />
-  <img src="public/assets/icons/javascript.svg" width="30" alt="JavaScript" />
-  <img src="public/assets/icons/nodejs.svg" width="30" alt="Node.js" />
-  <img src="public/assets/icons/sqlite.svg" width="30" alt="SQLite" />
-  <img src="public/assets/icons/turso.svg" width="30" alt="Turso" />
-  <img src="public/assets/icons/vercel.svg" width="30" alt="Vercel" />
-  <img src="public/assets/icons/github.svg" width="30" alt="GitHub" />
+
+<img src="public/assets/images/landing.jpg" width="760" alt="Halaman landing"><br>
+<sub><b>Landing</b> — mengisi nama & nomor absen</sub>
+
 </div>
+
+| <img src="public/assets/images/quiz.jpg" width="380" alt="Halaman kuis"> | <img src="public/assets/images/result.jpg" width="380" alt="Halaman hasil"> |
+| :---: | :---: |
+| **Kuis** — soal, astronot, dan progress misi | **Hasil** — poin, nilai, dan pembahasan |
+
+<div align="center">
+
+<img src="public/assets/images/admin.jpg" width="760" alt="Panel admin"><br>
+<sub><b>Panel Admin</b> — scoreboard dan pengelolaan peserta</sub>
+
+</div>
+
+---
+
+## Alur Permainan
+
+1. Siswa membuka halaman landing dan mengisi **nama** serta **nomor absen**.
+2. Sistem menampilkan 10 soal permutasi dengan urutan soal dan pilihan yang diacak.
+3. Setiap jawaban benar menaikkan astronot satu tingkat dan menambah poin COMBO.
+4. Keluar halaman, pindah tab, atau refresh akan **mengunci misi** — siswa dapat lanjut
+   dari soal terakhir setelah guru mengizinkan lewat panel admin.
+5. Setelah 10 soal selesai, halaman hasil menampilkan total poin, nilai, dan pembahasan.
+6. Guru memantau scoreboard secara real-time dan mengekspor hasil ke Excel.
+
+---
+
+## Tech Stack
 
 | Teknologi | Keterangan |
 | --- | --- |
@@ -37,17 +97,6 @@ Dibangun untuk berjalan **online** (Vercel + Turso) maupun **lokal** untuk simul
 | <img src="public/assets/icons/turso.svg" width="18" alt="Turso"> Turso | Database cloud untuk produksi |
 | <img src="public/assets/icons/vercel.svg" width="18" alt="Vercel"> Vercel | Hosting & deployment serverless |
 | <img src="public/assets/icons/github.svg" width="18" alt="GitHub"> GitHub | Version control & CI/CD |
-
----
-
-## Tangkapan Layar
-
-| Tampilan | Keterangan |
-| --- | --- |
-| ![Halaman Landing](public/assets/images/landing.jpg) | Halaman awal untuk mengisi nama & absen |
-| ![Halaman Kuis](public/assets/images/quiz.jpg) | Tampilan soal, astronot, dan progress misi |
-| ![Halaman Admin](public/assets/images/admin.jpg) | Scoreboard & pengelolaan peserta |
-| ![Halaman Hasil](public/assets/images/result.jpg) | Total poin, nilai, dan pembahasan |
 
 ---
 
@@ -103,6 +152,8 @@ Lalu buka:
 Siswa lain di WiFi/hotspot yang sama dapat mengakses `http://<IP-laptop>:3000`
 (IP ditampilkan otomatis di terminal saat server mulai).
 
+> Ubah `ADMIN_PASSWORD` sebelum dipakai di kelas agar tidak memakai password default.
+
 ---
 
 ## Deploy Produksi (Vercel + Turso)
@@ -129,7 +180,7 @@ Cara termudah lewat dashboard:
 4. Sebelum deploy, buka **Environment Variables**, tambahkan:
 
 | Name | Value |
-| -------------------- | ------------------------ |
+| --- | --- |
 | `ADMIN_PASSWORD` | `Krisna17#` |
 | `TURSO_DATABASE_URL` | `libsql://...turso.io` |
 | `TURSO_AUTH_TOKEN` | token dari langkah 1 |
@@ -156,6 +207,18 @@ Setelah selesai:
 
 ---
 
+## Panel Admin
+
+- Login menggunakan password (`ADMIN_PASSWORD`)
+- **Statistik**: total peserta, selesai, terkunci, rata-rata poin, rata-rata nilai
+- **Scoreboard** diurutkan berdasarkan poin tertinggi
+- **Semua Peserta**: pencarian nama/absen, filter status, kolom Poin · Nilai · Streak
+- **Aksi Peserta**: Izinkan Lanjut (untuk yang terkunci), Reset, Hapus
+- **Ekspor Excel** dalam format `.xls` yang rapi
+- **Auto-refresh** data setiap 8 detik
+
+---
+
 ## Aturan Permainan
 
 | Aturan | Keterangan |
@@ -171,18 +234,6 @@ Setelah selesai:
 | **Keluar / Pindah Tab / Refresh** | Muncul peringatan browser, misi terkunci, lanjut dari soal terakhir setelah diizinkan admin |
 | **Setelah Selesai** | Ulang perlu izin admin |
 | **Nama Duplikat** | Ditolak; admin harus menghapus data lama terlebih dahulu |
-
----
-
-## Panel Admin
-
-- Login menggunakan password (`ADMIN_PASSWORD`)
-- **Statistik**: total peserta, selesai, terkunci, rata-rata poin, rata-rata nilai
-- **Scoreboard** diurutkan berdasarkan poin tertinggi
-- **Semua Peserta**: pencarian nama/absen, filter status, kolom Poin · Nilai · Streak
-- **Aksi Peserta**: Izinkan Lanjut (untuk yang terkunci), Reset, Hapus
-- **Ekspor Excel** dalam format `.xls` yang rapi
-- **Auto-refresh** data setiap 8 detik
 
 ---
 
@@ -203,34 +254,3 @@ Semua soal berada di **`lib/questions.js`**. Contoh satu entri:
 
 Ubah `ADMIN_PASSWORD` kapan saja lewat Environment Variables di Vercel
 (atau `.env.local` saat lokal).
-
----
-
-## Aset & Dokumentasi
-
-Gambar-gambar untuk dokumentasi disimpan di folder:
-
-```
-public/assets/images/
-├── landing.jpg    # tampilan halaman awal
-├── quiz.jpg       # tampilan halaman kuis
-├── admin.jpg      # tampilan panel admin
-└── result.jpg     # tampilan halaman hasil
-```
-
-Screenshot disimpan sebagai **JPEG maks 1400px** agar ringan saat dibuka di GitHub
-(total ±220 KB untuk 4 gambar). PNG resolusi penuh disimpan sebagai backup lokal di
-`public/assets/images/_source/` (di-ignore, tidak ikut ke repo).
-
-Untuk menambahkan tangkapan layar, simpan file di dalam folder tersebut, lalu rujuk
-memakai path **relatif dari root repo** (README berada di root, jadi selalu diawali `public/`):
-
-```md
-![Halaman Soal](public/assets/images/solve.jpg)
-```
-
-> Jangan menulis `assets/images/...` tanpa `public/` — GitHub akan menampilkan
-> ikon gambar rusak karena file-nya tidak ditemukan.
-
-Ganti `solve.jpg` dengan nama file yang diinginkan. Setelah mengganti screenshot,
-jalankan `python3 optimize-screenshots.py` untuk membuat versi ringannya.
