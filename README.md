@@ -17,26 +17,26 @@ Dibangun untuk berjalan **online** (Vercel + Turso) maupun **lokal** untuk simul
 ## 🧰 Tech Stack
 
 <div align="center">
-  <img src="assets/icons/html5.svg" width="44" height="44" alt="HTML5" />
-  <img src="assets/icons/css.svg" width="44" height="44" alt="CSS3" />
-  <img src="assets/icons/javascript.svg" width="44" height="44" alt="JavaScript" />
-  <img src="assets/icons/nodejs.svg" width="44" height="44" alt="Node.js" />
-  <img src="assets/icons/sqlite.svg" width="44" height="44" alt="SQLite" />
-  <img src="assets/icons/turso.svg" width="44" height="44" alt="Turso" />
-  <img src="assets/icons/vercel.svg" width="44" height="44" alt="Vercel" />
-  <img src="assets/icons/github.svg" width="44" height="44" alt="GitHub" />
+  <img src="public/assets/icons/html5.svg" width="44" height="44" alt="HTML5" />
+  <img src="public/assets/icons/css.svg" width="44" height="44" alt="CSS3" />
+  <img src="public/assets/icons/javascript.svg" width="44" height="44" alt="JavaScript" />
+  <img src="public/assets/icons/nodejs.svg" width="44" height="44" alt="Node.js" />
+  <img src="public/assets/icons/sqlite.svg" width="44" height="44" alt="SQLite" />
+  <img src="public/assets/icons/turso.svg" width="44" height="44" alt="Turso" />
+  <img src="public/assets/icons/vercel.svg" width="44" height="44" alt="Vercel" />
+  <img src="public/assets/icons/github.svg" width="44" height="44" alt="GitHub" />
 </div>
 
 | Teknologi | Keterangan |
 | --- | --- |
-| ![HTML5](assets/icons/html5.svg) HTML5 | Struktur halaman statis |
-| ![CSS3](assets/icons/css.svg) CSS3 | Tampilan bertema luar angkasa |
-| ![JavaScript](assets/icons/javascript.svg) JavaScript | Logika frontend interaktif |
-| ![Node.js](assets/icons/nodejs.svg) Node.js | Runtime server & serverless functions |
-| ![SQLite](assets/icons/sqlite.svg) SQLite | Database lokal untuk mode pengembangan |
-| ![Turso](assets/icons/turso.svg) Turso | Database cloud untuk produksi |
-| ![Vercel](assets/icons/vercel.svg) Vercel | Hosting & deployment serverless |
-| ![GitHub](assets/icons/github.svg) GitHub | Version control & CI/CD |
+| ![HTML5](public/assets/icons/html5.svg) HTML5 | Struktur halaman statis |
+| ![CSS3](public/assets/icons/css.svg) CSS3 | Tampilan bertema luar angkasa |
+| ![JavaScript](public/assets/icons/javascript.svg) JavaScript | Logika frontend interaktif |
+| ![Node.js](public/assets/icons/nodejs.svg) Node.js | Runtime server & serverless functions |
+| ![SQLite](public/assets/icons/sqlite.svg) SQLite | Database lokal untuk mode pengembangan |
+| ![Turso](public/assets/icons/turso.svg) Turso | Database cloud untuk produksi |
+| ![Vercel](public/assets/icons/vercel.svg) Vercel | Hosting & deployment serverless |
+| ![GitHub](public/assets/icons/github.svg) GitHub | Version control & CI/CD |
 
 ---
 
@@ -44,10 +44,10 @@ Dibangun untuk berjalan **online** (Vercel + Turso) maupun **lokal** untuk simul
 
 | Tampilan | Keterangan |
 | --- | --- |
-| ![Halaman Landing](assets/images/landing.png) | Halaman awal untuk mengisi nama & absen |
-| ![Halaman Kuis](assets/images/quiz.png) | Tampilan soal, astronot, dan progress misi |
-| ![Halaman Admin](assets/images/admin.png) | Scoreboard & pengelolaan peserta |
-| ![Halaman Hasil](assets/images/result.png) | Total poin, nilai, dan pembahasan |
+| ![Halaman Landing](public/assets/images/landing.png) | Halaman awal untuk mengisi nama & absen |
+| ![Halaman Kuis](public/assets/images/quiz.png) | Tampilan soal, astronot, dan progress misi |
+| ![Halaman Admin](public/assets/images/admin.png) | Scoreboard & pengelolaan peserta |
+| ![Halaman Hasil](public/assets/images/result.png) | Total poin, nilai, dan pembahasan |
 
 ---
 
@@ -218,10 +218,14 @@ public/assets/images/
 └── result.png    # tampilan halaman hasil
 ```
 
-Untuk menambahkan tangkapan layar, simpan file dengan nama tersebut, lalu gunakan markdown:
+Untuk menambahkan tangkapan layar, simpan file di dalam folder tersebut, lalu rujuk
+memakai path **relatif dari root repo** (README berada di root, jadi selalu diawali `public/`):
 
 ```md
-![Output](assets/images/solve.png)
+![Halaman Soal](public/assets/images/solve.png)
 ```
+
+> ⚠️ Jangan menulis `assets/images/...` tanpa `public/` — GitHub akan menampilkan
+> ikon gambar rusak karena file-nya tidak ditemukan.
 
 Ganti `solve.png` dengan nama file yang diinginkan.
