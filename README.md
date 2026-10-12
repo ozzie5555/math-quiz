@@ -10,6 +10,14 @@ sementara guru memantau seluruh progres secara real-time melalui panel admin.</p
 <p>Dapat dijalankan <b>online</b> (Vercel + Turso) maupun <b>lokal</b> untuk simulasi di kelas.</p>
 
 <p>
+  <a href="https://math-quiz-livid-chi.vercel.app"><b>Live Demo</b></a>
+  &nbsp;·&nbsp;
+  <a href="#menjalankan-secara-lokal">Jalankan di Lokal</a>
+  &nbsp;·&nbsp;
+  <a href="#mengubah-soal">Ganti Soal</a>
+</p>
+
+<p>
   <img src="public/assets/icons/html5.svg" width="28" alt="HTML5" />
   <img src="public/assets/icons/css.svg" width="28" alt="CSS3" />
   <img src="public/assets/icons/javascript.svg" width="28" alt="JavaScript" />
@@ -36,6 +44,7 @@ sementara guru memantau seluruh progres secara real-time melalui panel admin.</p
 - [Panel Admin](#panel-admin)
 - [Aturan Permainan](#aturan-permainan)
 - [Mengubah Soal](#mengubah-soal)
+- [License](#license)
 
 ---
 
@@ -254,3 +263,10 @@ Semua soal berada di **`lib/questions.js`**. Contoh satu entri:
 
 Ubah `ADMIN_PASSWORD` kapan saja lewat Environment Variables di Vercel
 (atau `.env.local` saat lokal).
+
+---
+
+## License
+
+Dirilis di bawah [MIT License](LICENSE) — bebas dipakai, dimodifikasi, dan dibagikan
+dengan tetap mencantumkan hak cipta pemiliknya.
